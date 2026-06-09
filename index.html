@@ -3,237 +3,1609 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Mystic Canvas | Luxury Interior Design</title>
+    <meta name="description" content="The Mystic Canvas — an Indore-based interior design studio crafting warm, characterful Indian interiors layered with natural wood, terracotta jaali, cane and jewel-toned colour.">
+    <meta name="theme-color" content="#FAF8F5">
+    <meta name="color-scheme" content="light">
+    <title>The Mystic Canvas — Interior Design Studio</title>
+
+    <!-- Fonts: Fraunces (display serif) · Hanken Grotesk (body) · JetBrains Mono (index/labels) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- ============================================================
+         3D / MOTION DEPENDENCIES (secure HTTPS CDNs)
+         GSAP + ScrollTrigger (animation) · Three.js (WebGL showcase)
+         All effects degrade gracefully if any of these fail to load.
+    ============================================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>if (window.gsap) { document.documentElement.classList.add('gsap-ready'); }</script>
+
     <style>
+        /* ============================================================
+           DESIGN TOKENS — "Couture" light & vibrant palette
+           Warm alabaster canvas · charcoal type · terracotta / brass / sage
+        ============================================================ */
         :root {
-            --primary: #1A1A1A;
-            --secondary: #F9F6F0;
-            --accent: #C5A880;
-            --text-dark: #333333;
-            --text-light: #FFFFFF;
+            --bg:        #FAF8F5;   /* pristine warm alabaster / ivory backdrop */
+            --bg-warm:   #F6F0E7;   /* soft cream panel */
+            --bg-sink:   #ECE4D7;   /* recessed base for engraved depth */
+            --surface:   #FFFFFF;   /* raised card top / art mat */
+
+            --ink:       #1A1A1A;   /* deep slate / charcoal — razor-sharp type */
+            --ink-soft:  #564D42;   /* secondary text */
+            --ink-mute:  #897F70;   /* labels / meta */
+            --ink-faint: #B7AC9B;   /* faint */
+
+            --brass:      #A37E3C;  /* brushed brass — primary accent */
+            --brass-deep: #82612A;
+            --terra:      #BF5E39;  /* warm terracotta — vibrant pop */
+            --sage:       #7E9072;  /* muted sage — cool accent */
+
+            --line:      rgba(35, 32, 26, 0.13);
+            --line-soft: rgba(35, 32, 26, 0.07);
+
+            /* Tactile (neumorphic) shadow stops — warm-tinted */
+            --sh-hi:   rgba(255, 255, 255, 0.92);
+            --sh-lo:   rgba(150, 122, 88, 0.24);
+            --sh-cast: rgba(86, 64, 38, 0.16);
+
+            --serif: 'Fraunces', 'Times New Roman', Georgia, serif;
+            --sans:  'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
+            --mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+            --pad-x:   clamp(1.25rem, 5vw, 5.5rem);
+            --sec-pad: clamp(5.5rem, 13vw, 12rem);
+            --maxw:    1640px;
+            --ease:    cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 6rem;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
         body {
-            background-color: var(--secondary);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 5%;
-            background-color: transparent;
-            position: absolute;
-            width: 100%;
-            z-index: 10;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--text-light);
-            text-transform: uppercase;
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1600') no-repeat center center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: var(--text-light);
-            padding: 0 1rem;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            letter-spacing: 4px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin-bottom: 2rem;
-            color: #E0E0E0;
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--sans);
             font-weight: 300;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 2.5rem;
-            background-color: var(--accent);
-            color: var(--primary);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            border: 2px solid var(--accent);
-        }
-
-        .btn:hover {
-            background-color: transparent;
-            color: var(--text-light);
-        }
-
-        /* About / Philosophy Section */
-        .about {
-            padding: 5rem 5%;
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .about h2 {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            overflow-x: hidden;
             position: relative;
         }
 
-        .about h2::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 2px;
-            background-color: var(--accent);
-            margin: 10px auto 0;
+        img { display: block; max-width: 100%; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        em { font-style: italic; }
+
+        ::selection { background: var(--terra); color: #fff; }
+
+        :focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-warm); }
+        ::-webkit-scrollbar-thumb { background: #d8cdba; }
+        ::-webkit-scrollbar-thumb:hover { background: #c9bca4; }
+
+        /* ============================================================
+           ATMOSPHERE — fine paper grain + sunlit glow
+        ============================================================ */
+        .grain {
+            position: fixed;
+            inset: -120px;
+            z-index: 9000;
+            pointer-events: none;
+            opacity: 0.035;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: grainShift 0.5s steps(2) infinite;
+        }
+        @keyframes grainShift {
+            0%   { transform: translate(0, 0); }
+            25%  { transform: translate(-3%, 2%); }
+            50%  { transform: translate(2%, -3%); }
+            75%  { transform: translate(-2%, -2%); }
+            100% { transform: translate(3%, 1%); }
         }
 
-        /* Portfolio Grid */
-        .portfolio {
-            padding: 5rem 5%;
-            background-color: #FFFFFF;
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(110% 70% at 50% -8%, rgba(255, 248, 233, 0.75), transparent 55%);
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        /* ============================================================
+           CUSTOM CURSOR (fine-pointer only · blend adapts to bg)
+        ============================================================ */
+        .cursor-on, .cursor-on * { cursor: none; }
+
+        .cursor-ring, .cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .cursor-on .cursor-ring,
+        .cursor-on .cursor-dot { opacity: 1; }
+
+        .cursor-ring {
+            width: 38px; height: 38px;
+            border: 1px solid #fff;
+            transition: width 0.35s var(--ease), height 0.35s var(--ease),
+                        background-color 0.35s var(--ease), opacity 0.4s ease;
+        }
+        .cursor-dot { width: 5px; height: 5px; background: #fff; }
+        .cursor-ring.is-hover { width: 64px; height: 64px; background: rgba(255,255,255,0.10); }
+        .cursor-ring.is-hide  { opacity: 0; }
+        .cursor-dot.is-hide   { opacity: 0; }
+
+        /* ============================================================
+           SHARED PRIMITIVES
+        ============================================================ */
+        .wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--pad-x); }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: 0.7rem; font-weight: 400;
+            letter-spacing: 0.32em; text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+        .accent-dot { color: var(--terra); }
+
+        .sec { padding-block: var(--sec-pad); position: relative; z-index: 2; }
+        .sec-head {
+            display: flex; align-items: baseline;
+            gap: clamp(1rem, 4vw, 4rem);
+            border-top: 1px solid var(--line);
+            padding-top: 1.4rem;
+            margin-bottom: clamp(2.5rem, 7vw, 6rem);
+            font-family: var(--mono);
+            font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+            color: var(--ink-mute);
+        }
+        .sec-head__no   { color: var(--brass); }
+        .sec-head__name { color: var(--ink); }
+        .sec-head__meta { margin-left: auto; text-align: right; color: var(--ink-mute); }
+
+        /* Reveal-on-scroll */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 1s var(--ease), transform 1s var(--ease);
+            transition-delay: calc(var(--i, 0) * 75ms);
+        }
+        [data-reveal].in { opacity: 1; transform: none; }
+
+        .gsap-ready [data-anim="stage"] { opacity: 0; }
+        .gsap-ready [data-anim="wipe"] .frame__media { clip-path: inset(0 0 100% 0); }
+
+        /* ============================================================
+           HEADER / NAV
+        ============================================================ */
+        .site-head {
+            position: fixed; inset: 0 0 auto 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1.5rem; padding: 1.5rem var(--pad-x);
+            transition: background-color 0.5s var(--ease), padding 0.5s var(--ease), border-color 0.5s var(--ease);
+            border-bottom: 1px solid transparent;
+        }
+        .site-head.is-scrolled {
+            background: rgba(253, 251, 247, 0.82);
+            backdrop-filter: blur(14px) saturate(120%);
+            -webkit-backdrop-filter: blur(14px) saturate(120%);
+            padding-block: 1.05rem;
+            border-bottom: 1px solid var(--line);
         }
 
-        .grid {
+        .brand {
+            font-family: var(--serif);
+            font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+            font-weight: 500; letter-spacing: 0.01em;
+            color: var(--ink);
+            display: inline-flex; align-items: flex-start; gap: 0.15em; line-height: 1;
+        }
+        .brand em { font-style: italic; font-weight: 400; }
+        .brand sup { font-family: var(--mono); font-size: 0.42em; top: -0.2em; color: var(--brass); font-weight: 400; }
+
+        .nav-links { display: flex; align-items: center; gap: clamp(1.25rem, 2.4vw, 2.75rem); }
+        .nav-links a {
+            font-family: var(--mono); font-size: 0.7rem;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--ink-soft); position: relative; padding-block: 0.35rem;
+            transition: color 0.3s ease;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; left: 0; bottom: 0;
+            width: 100%; height: 1px; background: var(--brass);
+            transform: scaleX(0); transform-origin: right; transition: transform 0.4s var(--ease);
+        }
+        .nav-links a:hover, .nav-links a[aria-current="true"] { color: var(--ink); }
+        .nav-links a:hover::after, .nav-links a[aria-current="true"]::after { transform: scaleX(1); transform-origin: left; }
+
+        .clock {
+            font-family: var(--mono); font-size: 0.7rem;
+            letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+            display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+        }
+        .clock::before {
+            content: ''; width: 6px; height: 6px; border-radius: 50%;
+            background: var(--sage);
+            box-shadow: 0 0 0 0 rgba(126, 144, 114, 0.6);
+            animation: pulse 2.6s ease-out infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(126, 144, 114, 0.5); }
+            70%  { box-shadow: 0 0 0 7px rgba(126, 144, 114, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(126, 144, 114, 0); }
+        }
+
+        /* ============================================================
+           HERO — typographic, sunlit video backdrop
+        ============================================================ */
+        .hero {
+            position: relative; min-height: 100svh;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: clamp(7rem, 14vh, 11rem) var(--pad-x) clamp(2rem, 5vh, 3.5rem);
+            z-index: 2; overflow: hidden;
+        }
+        .hero__media { position: absolute; inset: 0; z-index: -3; overflow: hidden; }
+        .hero__media video {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: saturate(1.12) brightness(1.04) contrast(1.02);
+            will-change: transform;
+        }
+        /* Cream wash keeps charcoal type crisp while the footage stays bright */
+        .hero__scrim {
+            position: absolute; inset: 0; z-index: -2;
+            background:
+                linear-gradient(102deg, rgba(253,251,247,0.95) 0%, rgba(253,251,247,0.80) 34%, rgba(253,251,247,0.50) 68%, rgba(253,251,247,0.36) 100%),
+                linear-gradient(to top, rgba(253,251,247,0.92) 0%, rgba(253,251,247,0) 26%, rgba(253,251,247,0) 72%, rgba(253,251,247,0.55) 100%);
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 4%; left: 58%;
+            width: 80vw; height: 80vw; max-width: 1000px; max-height: 1000px;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, rgba(255, 240, 214, 0.55) 0%, rgba(255, 240, 214, 0.12) 38%, transparent 64%);
+            pointer-events: none; z-index: -1;
+        }
+
+        .hero__top { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; flex-wrap: wrap; }
+        .hero__index {
+            font-family: var(--mono); font-size: 0.7rem;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute);
+        }
+
+        .hero__title {
+            font-family: var(--serif); font-optical-sizing: auto; font-weight: 300;
+            font-size: clamp(3.4rem, 12.5vw, 13rem);
+            line-height: 0.92; letter-spacing: -0.02em; color: var(--ink);
+            margin-block: auto clamp(1.5rem, 4vh, 3rem); will-change: transform;
+        }
+        .hero__title .line { display: block; overflow: hidden; padding-block: 0.1em; margin-block: -0.1em; }
+        .hero__title .line__in { display: block; transform: translateY(112%); }
+        .hero__title em { font-style: italic; font-weight: 300; color: var(--terra); }
+        .hero__title .dot-accent { color: var(--brass); font-style: normal; }
+
+        .hero__foot { display: flex; justify-content: space-between; align-items: flex-end; gap: clamp(1.5rem, 5vw, 4rem); flex-wrap: wrap; }
+        .hero__lede {
+            max-width: 42ch; color: var(--ink-soft);
+            font-size: clamp(0.95rem, 1.15vw, 1.1rem); line-height: 1.65;
+            order: 2; margin-left: auto;
+        }
+        .hero__lede em { color: var(--ink); font-style: italic; }
+
+        .scroll-cue {
+            display: inline-flex; align-items: center; gap: 0.85rem;
+            font-family: var(--mono); font-size: 0.68rem;
+            letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute);
+            order: 1; transition: color 0.3s ease;
+        }
+        .scroll-cue:hover { color: var(--ink); }
+        .scroll-cue__line { position: relative; width: 58px; height: 1px; background: var(--line); overflow: hidden; }
+        .scroll-cue__line::after {
+            content: ''; position: absolute; inset: 0; width: 40%; background: var(--brass);
+            animation: cue 2.4s var(--ease) infinite;
+        }
+        @keyframes cue {
+            0% { transform: translateX(-100%); }
+            60% { transform: translateX(250%); }
+            100% { transform: translateX(250%); }
+        }
+
+        .hero__index, .hero__lede, .scroll-cue { opacity: 0; transform: translateY(14px); animation: fadeUp 1s var(--ease) forwards; }
+        .hero__index { animation-delay: 0.15s; }
+        .hero__lede  { animation-delay: 1s; }
+        .scroll-cue  { animation-delay: 1.15s; }
+        @keyframes fadeUp { to { opacity: 1; transform: none; } }
+
+        .reveal-line .line__in { animation: rise 1.15s var(--ease) forwards; }
+        .reveal-line .line:nth-child(1) .line__in { animation-delay: 0.3s; }
+        .reveal-line .line:nth-child(2) .line__in { animation-delay: 0.45s; }
+        @keyframes rise { to { transform: translateY(0); } }
+
+        /* ============================================================
+           COLLECTIONS — 3D engraved option cards + framed showcase
+        ============================================================ */
+        .collections__grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: minmax(290px, 0.82fr) 1.35fr;
+            gap: clamp(2rem, 5vw, 5rem);
+            align-items: center;
         }
 
-        .grid-item {
+        /* --- The tactile, engraved option cards --- */
+        .opts { display: flex; flex-direction: column; gap: clamp(0.85rem, 1.5vw, 1.25rem); perspective: 1100px; }
+        .opt {
+            display: flex; align-items: center; gap: clamp(0.85rem, 1.5vw, 1.2rem);
+            width: 100%; text-align: left; cursor: pointer;
+            padding: clamp(0.9rem, 1.7vw, 1.4rem) clamp(1rem, 1.9vw, 1.5rem);
+            border-radius: 16px;
+            background: linear-gradient(145deg, #FFFFFF 0%, #F1E9DC 100%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow:
+                -7px -7px 16px var(--sh-hi),
+                9px 9px 22px var(--sh-lo),
+                inset 0 0 0 1px rgba(35, 32, 26, 0.04);
+            color: var(--ink);
+            transform-style: preserve-3d; will-change: transform;
+            transition: box-shadow 0.45s var(--ease), background 0.45s var(--ease), border-color 0.45s var(--ease);
+        }
+        .opt:hover { box-shadow: -9px -9px 20px var(--sh-hi), 14px 14px 30px var(--sh-lo); }
+        .opt:active { box-shadow: inset 4px 4px 10px var(--sh-lo), inset -4px -4px 10px var(--sh-hi); }
+        .opt.is-active {
+            background: linear-gradient(145deg, #ECE3D4 0%, #FBF7F0 100%);
+            border-color: rgba(163, 126, 60, 0.45);
+            box-shadow:
+                inset 6px 6px 13px rgba(150, 122, 88, 0.32),
+                inset -6px -6px 13px rgba(255, 255, 255, 0.95);
+        }
+
+        .opt__chip {
+            flex: 0 0 auto;
+            width: clamp(44px, 4.4vw, 60px); aspect-ratio: 1;
+            border-radius: 11px; background-size: cover; background-position: center;
+            box-shadow: inset 0 0 0 1px rgba(35, 32, 26, 0.14), 0 5px 12px rgba(86, 64, 38, 0.22);
+        }
+        .opt__body { flex: 1 1 auto; display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+        .opt__no { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.14em; color: var(--ink-mute); transition: color 0.4s var(--ease); }
+        .opt.is-active .opt__no { color: var(--brass); }
+        .opt__name {
+            font-family: var(--serif); font-weight: 500;
+            font-size: clamp(1.15rem, 1.85vw, 1.6rem); line-height: 1.05; color: var(--ink);
+            transition: color 0.4s var(--ease);
+        }
+        .opt.is-active .opt__name { color: var(--brass-deep); }
+        .opt__meta { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+
+        .opt__mark {
+            flex: 0 0 auto; width: 12px; height: 12px; border-radius: 50%;
+            border: 1px solid var(--ink-faint);
+            transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+        }
+        .opt.is-active .opt__mark { background: var(--brass); border-color: var(--brass); box-shadow: 0 0 0 4px rgba(163, 126, 60, 0.16); }
+
+        /* --- The framed "fine art" media showcase --- */
+        .showcase-wrap { perspective: 1500px; }
+        .showcase {
             position: relative;
-            overflow: hidden;
-            height: 400px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: var(--surface);
+            padding: clamp(12px, 1.4vw, 22px);
+            border: 1px solid var(--line);
+            box-shadow:
+                0 2px 4px rgba(86, 64, 38, 0.06),
+                0 34px 70px -30px rgba(86, 64, 38, 0.45);
+            transform-style: preserve-3d; will-change: transform;
+        }
+        .stage {
+            position: relative; width: 100%;
+            aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg-sink);
+        }
+        @media (min-width: 900px) { .stage { aspect-ratio: 5 / 6; } }
+
+        .stage__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.85s var(--ease); }
+        .stage__img.is-show { opacity: 1; }
+        .stage--gl .stage__img { opacity: 0 !important; }
+
+        .stage__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .stage__video {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+            opacity: 0; transition: opacity 0.6s var(--ease); pointer-events: none; z-index: 2;
+        }
+        .stage__video.is-show { opacity: 1; }
+
+        .stage__frame { position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(35, 32, 26, 0.10); pointer-events: none; z-index: 3; }
+        .stage__tag {
+            position: absolute; left: 1rem; bottom: 1rem; z-index: 4;
+            font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase;
+            color: var(--ink);
+            background: rgba(253, 251, 247, 0.78);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            padding: 0.5rem 0.8rem; pointer-events: none;
+        }
+        .stage__badge {
+            position: absolute; right: 1rem; top: 1rem; z-index: 4;
+            font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--brass-deep);
+            background: rgba(253, 251, 247, 0.82);
+            padding: 0.4rem 0.6rem;
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            opacity: 0; transition: opacity 0.4s var(--ease); pointer-events: none;
+        }
+        .stage__badge.is-show { opacity: 1; }
+        .stage__badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--terra); animation: pulse 2.2s ease-out infinite; }
+
+        .stage-cap {
+            display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+            margin-top: 1.1rem; padding-top: 0.9rem; border-top: 1px solid var(--line);
+            font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute);
+        }
+        .stage-cap__name { color: var(--ink-soft); }
+
+        .collections__hint {
+            margin-top: clamp(1.5rem, 4vw, 2.5rem);
+            font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint);
         }
 
-        .grid-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+        /* ============================================================
+           STUDIO
+        ============================================================ */
+        .studio__grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+        .studio__statement {
+            grid-column: 1 / 8;
+            font-family: var(--serif); font-weight: 300;
+            font-size: clamp(1.65rem, 3.6vw, 3.1rem); line-height: 1.18; letter-spacing: -0.01em; color: var(--ink);
+        }
+        .studio__statement em { font-style: italic; color: var(--terra); }
+        .studio__body {
+            grid-column: 9 / 13; align-self: end;
+            display: flex; flex-direction: column; gap: 1.15rem;
+            color: var(--ink-soft); font-size: 0.95rem; line-height: 1.8;
         }
 
-        .grid-item:hover img {
-            transform: scale(1.05);
+        .practice { margin-top: clamp(3.5rem, 8vw, 6.5rem); border-top: 1px solid var(--line); }
+        .practice__row {
+            display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) minmax(0, 1.4fr);
+            gap: clamp(1rem, 3vw, 3rem); align-items: baseline;
+            padding-block: clamp(1.4rem, 3vw, 2.4rem); border-bottom: 1px solid var(--line);
+        }
+        .practice__no { font-family: var(--mono); font-size: 0.72rem; color: var(--brass); letter-spacing: 0.1em; }
+        .practice__title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.3rem, 2.4vw, 2rem); line-height: 1.1; color: var(--ink); }
+        .practice__desc { color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; }
+
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(3.5rem, 8vw, 6rem); }
+        .stat { padding: clamp(1.5rem, 3vw, 2.5rem) 0; border-top: 1px solid var(--line); }
+        .stat + .stat { padding-left: clamp(1.25rem, 3vw, 2.5rem); border-left: 1px solid var(--line); }
+        .stat__num { font-family: var(--serif); font-weight: 300; font-size: clamp(2.6rem, 5.5vw, 4.5rem); line-height: 0.95; color: var(--ink); letter-spacing: -0.02em; }
+        .stat__num span { color: var(--terra); }
+        .stat__label { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); margin-top: 0.9rem; }
+
+        /* ============================================================
+           INDEX — signature project navigation
+        ============================================================ */
+        .index__list { position: relative; }
+        .index__row {
+            display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+            align-items: center; gap: clamp(1rem, 3vw, 2.5rem);
+            padding-block: clamp(1.2rem, 2.6vw, 2.1rem);
+            border-top: 1px solid var(--line); position: relative;
+            transition: opacity 0.45s var(--ease);
+        }
+        .index__row:last-child { border-bottom: 1px solid var(--line); }
+        .index__list:hover .index__row { opacity: 0.34; }
+        .index__list:hover .index__row:hover { opacity: 1; }
+
+        .index__no { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; color: var(--ink-mute); transition: color 0.4s var(--ease); }
+        .index__row:hover .index__no { color: var(--brass); }
+        .index__title {
+            font-family: var(--serif); font-weight: 400;
+            font-size: clamp(1.5rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.01em; color: var(--ink);
+            transition: transform 0.5s var(--ease); transform-origin: left;
+        }
+        .index__row:hover .index__title { transform: translateX(clamp(0.6rem, 1.6vw, 1.6rem)); }
+        .index__title em { font-style: italic; color: var(--terra); }
+
+        .index__meta {
+            display: flex; align-items: baseline; gap: clamp(1rem, 2.6vw, 3rem);
+            font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute);
+            transition: color 0.4s var(--ease);
+        }
+        .index__row:hover .index__meta { color: var(--ink-soft); }
+        .index__cat  { min-width: 9.5rem; }
+        .index__loc  { min-width: 6rem; }
+        .index__year { min-width: 3rem; text-align: right; color: var(--ink-soft); }
+
+        .preview {
+            position: fixed; top: 0; left: 0;
+            width: clamp(220px, 21vw, 340px); aspect-ratio: 4 / 5;
+            background-size: cover; background-position: center;
+            opacity: 0; z-index: 400; pointer-events: none;
+            will-change: transform, opacity;
+            box-shadow: 0 30px 70px rgba(86, 64, 38, 0.3);
+            transition: opacity 0.5s var(--ease);
+        }
+        .preview::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(35, 32, 26, 0.14); }
+
+        /* ============================================================
+           GALLERY — fine art, full saturation, sunlit framing
+        ============================================================ */
+        .gallery__flow { display: flex; flex-direction: column; gap: clamp(4rem, 11vw, 10rem); }
+        .frame { width: 100%; perspective: 1000px; }
+        .frame--wide   { width: min(100%, 1120px); margin-inline: auto; }
+        .frame--left   { width: min(76%, 700px);  margin-right: auto; }
+        .frame--right  { width: min(76%, 700px);  margin-left: auto; }
+        .frame--narrow { width: min(58%, 520px);  margin-inline: auto; }
+
+        .frame__media {
+            overflow: hidden; position: relative;
+            transform-style: preserve-3d; will-change: transform;
+            background: var(--surface);
+            box-shadow:
+                0 0 0 1px var(--line),
+                0 2px 6px rgba(86, 64, 38, 0.07),
+                0 36px 70px -32px rgba(86, 64, 38, 0.42);
+            transition: box-shadow 0.6s var(--ease);
+        }
+        .frame:hover .frame__media {
+            box-shadow:
+                0 0 0 1px var(--line),
+                0 6px 14px rgba(86, 64, 38, 0.10),
+                0 48px 90px -32px rgba(86, 64, 38, 0.52);
+        }
+        .frame__media img {
+            width: 100%; height: 100%; object-fit: cover;
+            filter: saturate(1.06) contrast(1.02);
+            transition: filter 1.1s var(--ease);
+            will-change: transform;
+        }
+        .frame:hover .frame__media img { filter: saturate(1.12) contrast(1.03); }
+
+        .frame--wide .frame__media   { aspect-ratio: 16 / 10; }
+        .frame--left .frame__media,
+        .frame--right .frame__media  { aspect-ratio: 4 / 5; }
+        .frame--narrow .frame__media { aspect-ratio: 3 / 4; }
+
+        .frame__cap {
+            display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+            margin-top: 1.1rem; padding-top: 0.9rem; border-top: 1px solid var(--line);
+            font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute);
+        }
+        .frame__cap strong { color: var(--ink-soft); font-weight: 400; }
+
+        /* ============================================================
+           TESTIMONIAL
+        ============================================================ */
+        .quote { padding-block: var(--sec-pad); position: relative; z-index: 2; }
+        .quote__inner { max-width: 60rem; }
+        .quote__text {
+            font-family: var(--serif); font-weight: 300; font-style: italic;
+            font-size: clamp(1.5rem, 3.6vw, 3rem); line-height: 1.3; color: var(--ink); letter-spacing: -0.01em;
+        }
+        .quote__text .mark { color: var(--terra); font-style: normal; }
+        .quote__by { margin-top: clamp(1.5rem, 4vw, 2.5rem); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+        .quote__by strong { color: var(--brass); font-weight: 400; }
+
+        /* ============================================================
+           MARQUEE
+        ============================================================ */
+        .marquee { display: block; padding-block: clamp(2.5rem, 6vw, 5rem); border-block: 1px solid var(--line); overflow: hidden; position: relative; z-index: 2; }
+        .marquee__track { display: flex; align-items: center; width: max-content; animation: scrollX 26s linear infinite; }
+        .marquee:hover .marquee__track { animation-play-state: paused; }
+        @keyframes scrollX { to { transform: translateX(-50%); } }
+        .marquee__item {
+            font-family: var(--serif); font-style: italic; font-weight: 300;
+            font-size: clamp(2.4rem, 8vw, 7rem); line-height: 1; letter-spacing: -0.01em;
+            color: transparent; -webkit-text-stroke: 1px rgba(35, 32, 26, 0.24);
+            padding-inline: clamp(1rem, 3vw, 2.5rem); white-space: nowrap;
+            transition: -webkit-text-stroke-color 0.5s ease, color 0.5s ease;
+        }
+        .marquee:hover .marquee__item { -webkit-text-stroke-color: var(--ink); }
+        .marquee__star { color: var(--terra); -webkit-text-stroke: 0; font-size: clamp(1.4rem, 4vw, 3.5rem); font-style: normal; padding-inline: clamp(0.5rem, 1.5vw, 1.5rem); }
+
+        /* ============================================================
+           CONTACT
+        ============================================================ */
+        .contact__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(2.5rem, 7vw, 6rem); align-items: start; }
+        .contact__title { font-family: var(--serif); font-weight: 300; font-size: clamp(2.2rem, 5.5vw, 4.5rem); line-height: 1.05; letter-spacing: -0.02em; color: var(--ink); }
+        .contact__title em { font-style: italic; color: var(--terra); }
+
+        .contact__email {
+            display: inline-block; margin-top: clamp(1.5rem, 4vw, 2.5rem);
+            font-family: var(--serif); font-size: clamp(1.15rem, 2.4vw, 1.9rem); color: var(--ink);
+            position: relative; line-height: 1.3;
+        }
+        .contact__email::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px; background: var(--brass); transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease); }
+        .contact__email:hover::after { transform: scaleX(1); }
+
+        .contact__meta { margin-top: clamp(2rem, 5vw, 3rem); display: flex; flex-wrap: wrap; gap: 1.5rem 3rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); }
+        .contact__meta a { transition: color 0.3s ease; }
+        .contact__meta a:hover { color: var(--brass); }
+        .contact__meta span { display: block; color: var(--ink-soft); margin-top: 0.35rem; text-transform: none; letter-spacing: 0; font-family: var(--sans); }
+
+        .contact__form { display: flex; flex-direction: column; gap: clamp(1.5rem, 3vw, 2.2rem); }
+        .field { position: relative; }
+        .field input, .field select, .field textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line);
+            padding: 0.75rem 0; color: var(--ink); font-family: var(--sans); font-size: 1rem; font-weight: 300; outline: none;
+            transition: border-color 0.4s var(--ease);
+        }
+        .field textarea { resize: vertical; min-height: 90px; }
+        .field select { cursor: pointer; }
+        .field select option { background: var(--surface); color: var(--ink); }
+        .field input::placeholder, .field textarea::placeholder { color: var(--ink-mute); }
+        .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brass); }
+        .field label { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); display: block; margin-bottom: 0.6rem; }
+
+        .submit {
+            align-self: flex-start; margin-top: 0.5rem; background: none; border: none; color: var(--ink);
+            font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.85rem; padding-bottom: 0.4rem; position: relative; transition: gap 0.4s var(--ease);
+        }
+        .submit::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background: var(--brass); transform: scaleX(1); transform-origin: left; transition: transform 0.5s var(--ease); }
+        .submit:hover { gap: 1.4rem; }
+        .submit .arrow { color: var(--terra); transition: transform 0.4s var(--ease); }
+        .submit:hover .arrow { transform: translateX(4px); }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer { position: relative; z-index: 2; border-top: 1px solid var(--line); padding-top: clamp(3.5rem, 7vw, 5.5rem); overflow: hidden; }
+        .footer__cols { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 2.5rem; padding-bottom: clamp(3rem, 8vw, 6rem); }
+        .footer__bio { max-width: 32ch; color: var(--ink-soft); font-size: 0.92rem; line-height: 1.7; }
+        .footer__col h4 { font-family: var(--mono); font-size: 0.66rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 1.25rem; }
+        .footer__col a, .footer__col p { display: block; font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 0.7rem; transition: color 0.3s ease; width: fit-content; }
+        .footer__col a:hover { color: var(--brass); }
+
+        .footer__word {
+            font-family: var(--serif); font-weight: 300;
+            font-size: clamp(3.5rem, 21vw, 19rem); line-height: 0.82; letter-spacing: -0.03em;
+            color: var(--ink); opacity: 0.06; white-space: nowrap; user-select: none; margin-bottom: -0.06em;
+        }
+        .footer__word em { font-style: italic; }
+
+        .footer__base {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+            border-top: 1px solid var(--line); padding-block: 1.6rem 2rem;
+            font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute);
+        }
+        .footer__base a { transition: color 0.3s ease; }
+        .footer__base a:hover { color: var(--ink); }
+        .to-top { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .to-top .arrow { color: var(--brass); }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 980px) {
+            .collections__grid { display: flex; flex-direction: column; gap: clamp(2rem, 6vw, 3rem); }
+            .showcase-wrap { order: -1; }     /* art first, then the option cards */
+            .opts { flex-direction: column; }
+            .stage { aspect-ratio: 4 / 5; }
+            .studio__statement { grid-column: 1 / -1; }
+            .studio__body { grid-column: 1 / -1; }
+            .practice__row { grid-template-columns: 2.5rem 1fr; }
+            .practice__desc { grid-column: 2 / 3; }
+            .contact__grid { grid-template-columns: 1fr; }
+            .footer__cols { grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
+            .footer__bio { grid-column: 1 / -1; }
         }
 
-        .grid-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding: 2rem;
-            color: var(--text-light);
+        @media (max-width: 720px) {
+            .nav-links, .clock { display: none; }
+            .site-head { justify-content: space-between; }
+
+            .hero__lede { margin-left: 0; order: 1; }
+            .hero__foot { flex-direction: column; align-items: flex-start; }
+            .scroll-cue { order: 2; }
+
+            .index__row { grid-template-columns: 2.25rem 1fr; gap: 0.4rem 1rem; align-items: baseline; }
+            .index__meta { grid-column: 2 / 3; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 0.6rem; }
+            .index__cat, .index__loc, .index__year { min-width: 0; text-align: left; }
+            .index__row:hover .index__title { transform: none; }
+
+            .stats { grid-template-columns: 1fr; }
+            .stat + .stat { padding-left: 0; border-left: none; }
+
+            .frame--left, .frame--right, .frame--narrow, .frame--wide { width: 100%; }
+            .footer__cols { grid-template-columns: 1fr; }
         }
 
-        /* Contact Section */
-        .contact {
-            padding: 5rem 5%;
-            background-color: var(--primary);
-            color: var(--text-light);
-            text-align: center;
-        }
-
-        .contact h2 {
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-        }
-
-        .contact p {
-            color: #A0A0A0;
-            margin-bottom: 2rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1rem; }
-            nav { justify-content: center; }
+        /* ============================================================
+           MOTION PREFERENCES
+        ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+            .grain { animation: none; }
+            .hero__title .line__in { transform: none; }
+            .hero__index, .hero__lede, .scroll-cue { opacity: 1; transform: none; }
+            [data-reveal] { opacity: 1; transform: none; }
+            .gsap-ready [data-anim="stage"] { opacity: 1; }
+            .gsap-ready [data-anim="wipe"] .frame__media { clip-path: none; }
         }
     </style>
+
+    <noscript>
+        <style>
+            [data-reveal] { opacity: 1 !important; transform: none !important; }
+            .hero__title .line__in { transform: none !important; }
+            .hero__index, .hero__lede, .scroll-cue { opacity: 1 !important; transform: none !important; }
+            .stage__img:first-of-type { opacity: 1 !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">Mystic<span>Canvas</span></div>
-    </nav>
+    <!-- Atmosphere -->
+    <div class="grain" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
 
-    <section class="hero">
-        <h1>Transforming Spaces</h1>
-        <p>Bespoke interior design solutions tailored to reflect your unique story and lifestyle.</p>
-        <a href="#contact" class="btn">View Our Spaces</a>
+    <!-- Custom cursor -->
+    <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+    <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+    <!-- Index preview image (follows cursor) -->
+    <div class="preview" id="preview" aria-hidden="true"></div>
+
+    <!-- ============================================================
+         HEADER / NAV
+    ============================================================ -->
+    <header class="site-head" id="siteHead">
+        <a href="#top" class="brand" data-cursor>Mystic&nbsp;<em>Canvas</em><sup>®</sup></a>
+        <nav class="nav-links" aria-label="Primary">
+            <a href="#collections">Collections</a>
+            <a href="#studio">Studio</a>
+            <a href="#index">Index</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <span class="clock" aria-hidden="true">Indore <span data-clock>--:--:--</span></span>
+    </header>
+
+    <!-- ============================================================
+         HERO — typographic, sunlit video backdrop
+         ASSET: images/Hero Video.mp4
+    ============================================================ -->
+    <section class="hero" id="top" aria-label="Introduction">
+        <div class="hero__media" aria-hidden="true">
+            <video id="heroVideo" autoplay muted loop playsinline preload="metadata"
+                   poster="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg">
+                <source src="images/Hero%20Video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero__scrim" aria-hidden="true"></div>
+
+        <div class="hero__top">
+            <span class="hero__index">Interior Design Studio</span>
+            <span class="hero__index">Indore · India</span>
+        </div>
+
+        <h1 class="hero__title reveal-line">
+            <span class="line"><span class="line__in">Spaces that</span></span>
+            <span class="line"><span class="line__in">hold the <em>light</em><span class="dot-accent">.</span></span></span>
+        </h1>
+
+        <div class="hero__foot">
+            <a href="#collections" class="scroll-cue" aria-label="Scroll to collections">
+                Scroll<span class="scroll-cue__line"></span>
+            </a>
+            <p class="hero__lede">
+                An Indore-based interior design studio crafting warm, characterful
+                Indian interiors — layered with natural wood, terracotta jaali, cane
+                and <em>jewel-toned colour</em>.
+            </p>
+        </div>
     </section>
 
-    <section class="about">
-        <h2>Our Design Philosophy</h2>
-        <p>At The Mystic Canvas, we believe that every room is a blank canvas waiting for a story. We blend functionality with elegant aesthetics, crafting personalized sanctuaries that inspire and elevate everyday living.</p>
-    </section>
+    <!-- ============================================================
+         COLLECTIONS — 3D engraved option cards + framed showcase
+         Click a card → the framed showcase switches media (warp / crossfade)
+         ASSETS: real project photos + Hero Video.mp4 (Lounge card)
+    ============================================================ -->
+    <section class="sec" id="collections" aria-label="Collections">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="sec-head__no">01</span>
+                <span class="sec-head__name">Collections</span>
+                <span class="sec-head__meta">Pick a card &middot; The frame responds</span>
+            </header>
 
-    <section class="portfolio">
-        <h2 class="section-title">Featured Spaces</h2>
-        <div class="grid">
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1616486038856-f36b5d92762e?q=80&w=600" alt="Living Room">
-                <div class="grid-overlay"><h3>Modern Minimalist Living</h3></div>
-            </div>
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600" alt="Kitchen">
-                <div class="grid-overlay"><h3>Contemporary Culinary Kitchen</h3></div>
-            </div>
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=600" alt="Bedroom">
-                <div class="grid-overlay"><h3>Serene Master Suite</h3></div>
+            <div class="collections__grid">
+                <!-- Engraved, tactile option cards -->
+                <div class="opts" id="opts" role="tablist" aria-label="Project collections">
+                    <button class="opt is-active" type="button" role="tab" aria-selected="true" data-reveal style="--i:0">
+                        <span class="opt__chip" style="background-image:url('images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg')"></span>
+                        <span class="opt__body">
+                            <span class="opt__no">01</span>
+                            <span class="opt__name">Residential Sanctuaries</span>
+                            <span class="opt__meta">Living Spaces</span>
+                        </span>
+                        <span class="opt__mark" aria-hidden="true"></span>
+                    </button>
+                    <button class="opt" type="button" role="tab" aria-selected="false" data-reveal style="--i:1">
+                        <span class="opt__chip" style="background-image:url('images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg')"></span>
+                        <span class="opt__body">
+                            <span class="opt__no">02</span>
+                            <span class="opt__name">Bespoke Bedrooms</span>
+                            <span class="opt__meta">Private Retreats</span>
+                        </span>
+                        <span class="opt__mark" aria-hidden="true"></span>
+                    </button>
+                    <button class="opt" type="button" role="tab" aria-selected="false" data-reveal style="--i:2">
+                        <span class="opt__chip" style="background-image:url('images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg')"></span>
+                        <span class="opt__body">
+                            <span class="opt__no">03</span>
+                            <span class="opt__name">Artisan Detailing</span>
+                            <span class="opt__meta">Craft &amp; Thresholds</span>
+                        </span>
+                        <span class="opt__mark" aria-hidden="true"></span>
+                    </button>
+                    <button class="opt" type="button" role="tab" aria-selected="false" data-reveal style="--i:3">
+                        <span class="opt__chip" style="background-image:url('images/themystic_canvas_1662874487_2924725643071237690_31381163558_1.jpg')"></span>
+                        <span class="opt__body">
+                            <span class="opt__no">04</span>
+                            <span class="opt__name">Lounge &amp; Leisure</span>
+                            <span class="opt__meta">Slow Living · Film</span>
+                        </span>
+                        <span class="opt__mark" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+                <!-- Framed "fine art" media showcase -->
+                <div class="showcase-wrap" data-anim="stage">
+                    <div class="showcase" data-cursor>
+                        <div class="stage" id="stage">
+                            <img class="stage__img is-show" src="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg" alt="Living room with blue velvet seating and a diamond mirror niche, Indore">
+                            <img class="stage__img" src="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg" alt="Master bedroom with teal upholstered headboard and warm wood floor, Indore">
+                            <img class="stage__img" src="images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg" alt="Entrance foyer with carved teak door, teal door and peacock wallpaper, Indore">
+                            <img class="stage__img" src="images/themystic_canvas_1662874487_2924725643071237690_31381163558_1.jpg" alt="Balcony swing seat against a terracotta jaali screen, Indore">
+
+                            <video class="stage__video" id="stageVideo" muted loop playsinline preload="none"
+                                   poster="images/themystic_canvas_1662874487_2924725643071237690_31381163558_1.jpg">
+                                <source src="images/Hero%20Video.mp4" type="video/mp4">
+                            </video>
+
+                            <span class="stage__badge" id="stageBadge">Now Playing</span>
+                            <div class="stage__frame"></div>
+                            <div class="stage__tag" id="stageTag">01 — Residential</div>
+                        </div>
+                    </div>
+
+                    <div class="stage-cap">
+                        <span class="stage-cap__name" id="capName">Residential Sanctuaries</span>
+                        <span id="capMeta">Living Spaces · Indore</span>
+                    </div>
+                    <p class="collections__hint">Hover a card to feel it lift — click to reframe the showcase ⟶</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
-        <h2>Ready to collaborate?</h2>
-        <p>Let's turn your vision into a reality. Get a personalized design consultation.</p>
-        <a href="mailto:design@themysticcanvas.com" class="btn">Let's Connect</a>
+    <!-- ============================================================
+         STUDIO
+    ============================================================ -->
+    <section class="sec" id="studio" aria-label="Studio">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="sec-head__no">02</span>
+                <span class="sec-head__name">Studio</span>
+                <span class="sec-head__meta">Philosophy &amp; Practice</span>
+            </header>
+
+            <div class="studio__grid">
+                <h2 class="studio__statement" data-reveal>
+                    We design interiors with <em>soul</em> — where Indian craft, natural
+                    material and considered colour make a home feel unmistakably its own.
+                </h2>
+                <div class="studio__body" data-reveal style="--i:1">
+                    <p>
+                        The Mystic Canvas is an Indore-based studio devoted to warm,
+                        characterful interiors. We layer teak, cane, terracotta jaali and
+                        handmade tile with rich, lived-in colour — never decoration for its
+                        own sake.
+                    </p>
+                    <p>
+                        Every project begins with listening — to the light a room receives,
+                        the way a family moves through it, and the stories it is meant to
+                        hold. Only then do we begin to draw.
+                    </p>
+                </div>
+            </div>
+
+            <div class="practice" data-reveal>
+                <div class="practice__row">
+                    <span class="practice__no">A</span>
+                    <h3 class="practice__title">Residential Sanctuaries</h3>
+                    <p class="practice__desc">Full homes and apartments designed as warm, personal retreats — every threshold, niche and surface considered.</p>
+                </div>
+                <div class="practice__row">
+                    <span class="practice__no">B</span>
+                    <h3 class="practice__title">Bespoke Bedrooms</h3>
+                    <p class="practice__desc">Custom headboards, wardrobes and dressing spaces — tailored joinery in teak, cane and quiet colour.</p>
+                </div>
+                <div class="practice__row">
+                    <span class="practice__no">C</span>
+                    <h3 class="practice__title">Artisan Detailing</h3>
+                    <p class="practice__desc">Jaali screens, carved doors, pooja niches and tile work — the handcrafted details that give a space its signature.</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat" data-reveal>
+                    <div class="stat__num">10<span>+</span></div>
+                    <div class="stat__label">Years of Practice</div>
+                </div>
+                <div class="stat" data-reveal style="--i:1">
+                    <div class="stat__num">180</div>
+                    <div class="stat__label">Spaces Crafted</div>
+                </div>
+                <div class="stat" data-reveal style="--i:2">
+                    <div class="stat__num">100<span>%</span></div>
+                    <div class="stat__label">Bespoke, Every Time</div>
+                </div>
+            </div>
+        </div>
     </section>
+
+    <!-- ============================================================
+         INDEX — project navigation (real assets, Indore)
+    ============================================================ -->
+    <section class="sec" id="index" aria-label="Project index">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="sec-head__no">03</span>
+                <span class="sec-head__name">Index</span>
+                <span class="sec-head__meta">Selected Works · 2021–2025</span>
+            </header>
+
+            <ul class="index__list" id="indexList">
+                <li class="index__row" data-img="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg">
+                    <span class="index__no">01</span>
+                    <h3 class="index__title">Sunlit Living Pavilion</h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Residential</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2024</span>
+                    </span>
+                </li>
+                <li class="index__row" data-img="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg">
+                    <span class="index__no">02</span>
+                    <h3 class="index__title">The Teal Master <em>Suite</em></h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Bedroom</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2023</span>
+                    </span>
+                </li>
+                <li class="index__row" data-img="images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg">
+                    <span class="index__no">03</span>
+                    <h3 class="index__title">Peacock <em>Foyer</em></h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Artisan Detailing</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2024</span>
+                    </span>
+                </li>
+                <li class="index__row" data-img="images/themystic_canvas_1662874487_2924725643071237690_31381163558_1.jpg">
+                    <span class="index__no">04</span>
+                    <h3 class="index__title">The Garden Swing</h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Lounge</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2022</span>
+                    </span>
+                </li>
+                <li class="index__row" data-img="images/themystic_canvas_1663311393_2928390671364475232_31381163558.jpg">
+                    <span class="index__no">05</span>
+                    <h3 class="index__title">Cane &amp; Indigo <em>Bedroom</em></h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Bedroom</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2023</span>
+                    </span>
+                </li>
+                <li class="index__row" data-img="images/themystic_canvas_1682952428_3093151613250729900_31381163558_1.jpg">
+                    <span class="index__no">06</span>
+                    <h3 class="index__title">Rosewood <em>Threshold</em></h3>
+                    <span class="index__meta">
+                        <span class="index__cat">Entrance</span>
+                        <span class="index__loc">Indore</span>
+                        <span class="index__year">2021</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         GALLERY — fine art, full saturation, real assets
+    ============================================================ -->
+    <section class="sec" id="gallery" aria-label="Gallery">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="sec-head__no">04</span>
+                <span class="sec-head__name">Gallery</span>
+                <span class="sec-head__meta">Selected Frames</span>
+            </header>
+
+            <div class="gallery__flow">
+                <figure class="frame frame--wide" data-anim="wipe" data-tilt="4">
+                    <div class="frame__media">
+                        <img src="images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg" alt="Carved teak entrance door beside a teal door and peacock chinoiserie wallpaper, Indore" loading="lazy">
+                    </div>
+                    <figcaption class="frame__cap"><strong>Peacock Foyer</strong><span>Indore — 2024</span></figcaption>
+                </figure>
+
+                <figure class="frame frame--left" data-anim="wipe" data-tilt="5">
+                    <div class="frame__media">
+                        <img src="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg" alt="Master bedroom with teal channel-tufted headboard and bench, Indore" loading="lazy">
+                    </div>
+                    <figcaption class="frame__cap"><strong>The Teal Master Suite</strong><span>Indore — 2023</span></figcaption>
+                </figure>
+
+                <figure class="frame frame--right" data-anim="wipe" data-tilt="5">
+                    <div class="frame__media">
+                        <img src="images/themystic_canvas_1737872942_3553858284124111784_31381163558_1.jpg" alt="Bedroom with hand-painted bird-and-branch wall, blue headboard and cane detailing, Indore" loading="lazy">
+                    </div>
+                    <figcaption class="frame__cap"><strong>Hand-painted Retreat</strong><span>Indore — 2023</span></figcaption>
+                </figure>
+
+                <figure class="frame frame--wide" data-anim="wipe" data-tilt="4">
+                    <div class="frame__media">
+                        <img src="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg" alt="Living room with blue velvet seating, diamond mirror niche and travertine table, Indore" loading="lazy">
+                    </div>
+                    <figcaption class="frame__cap"><strong>Sunlit Living Pavilion</strong><span>Indore — 2024</span></figcaption>
+                </figure>
+
+                <figure class="frame frame--narrow" data-anim="wipe" data-tilt="6">
+                    <div class="frame__media">
+                        <img src="images/themystic_canvas_1664348351_2937089312154356419_31381163558_1.jpg" alt="Dressing niche with arched neon-lit mirror, teak wardrobe and teal bench, Indore" loading="lazy">
+                    </div>
+                    <figcaption class="frame__cap"><strong>Arched Dressing Niche</strong><span>Indore — 2023</span></figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         TESTIMONIAL
+    ============================================================ -->
+    <section class="quote" aria-label="Client testimonial">
+        <div class="wrap">
+            <div class="quote__inner">
+                <p class="quote__text" data-reveal>
+                    <span class="mark">“</span>They listened more than they spoke, then gave us a home
+                    that feels entirely our own — warm, layered, and somehow more
+                    <em>ourselves</em> than before.<span class="mark">”</span>
+                </p>
+                <p class="quote__by" data-reveal style="--i:1">
+                    <strong>Priya &amp; Arjun Mehta</strong> &nbsp;·&nbsp; Sunlit Living Pavilion, Indore
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         MARQUEE — outlined moving CTA → contact
+    ============================================================ -->
+    <a class="marquee" href="#contact" aria-label="Start a project">
+        <div class="marquee__track" aria-hidden="true">
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+            <span class="marquee__item">Let&rsquo;s create something timeless</span><span class="marquee__star">✦</span>
+        </div>
+    </a>
+
+    <!-- ============================================================
+         CONTACT
+    ============================================================ -->
+    <section class="sec" id="contact" aria-label="Contact">
+        <div class="wrap">
+            <header class="sec-head">
+                <span class="sec-head__no">05</span>
+                <span class="sec-head__name">Contact</span>
+                <span class="sec-head__meta">Start a Project</span>
+            </header>
+
+            <div class="contact__grid">
+                <div class="contact__lead" data-reveal>
+                    <h2 class="contact__title">Let&rsquo;s compose<br>your <em>space</em>.</h2>
+                    <a href="mailto:design@themysticcanvas.com" class="contact__email" data-magnetic>design@themysticcanvas.com</a>
+                    <div class="contact__meta">
+                        <div>
+                            Studio
+                            <span>Indore, Madhya Pradesh · By appointment</span>
+                        </div>
+                        <div>
+                            Telephone
+                            <span><a href="tel:+918989029494">+91 89890 29494</a></span>
+                        </div>
+                        <div>
+                            Social
+                            <span><a href="https://www.instagram.com/themystic_canvas/" aria-label="Instagram">@themystic_canvas</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUSTOMIZE: point action at your backend / Formspree endpoint -->
+                <form class="contact__form" action="mailto:design@themysticcanvas.com" method="GET" data-reveal style="--i:1">
+                    <div class="field">
+                        <label for="f-name">Name</label>
+                        <input id="f-name" type="text" name="name" placeholder="Your full name" required>
+                    </div>
+                    <div class="field">
+                        <label for="f-email">Email</label>
+                        <input id="f-email" type="email" name="email" placeholder="you@email.com" required>
+                    </div>
+                    <div class="field">
+                        <label for="f-service">Service of interest</label>
+                        <select id="f-service" name="service">
+                            <option value="residential">Residential Sanctuaries</option>
+                            <option value="bedroom">Bespoke Bedrooms</option>
+                            <option value="detailing">Artisan Detailing</option>
+                            <option value="lounge">Lounge &amp; Leisure</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="f-message">Tell us about your space</label>
+                        <textarea id="f-message" name="message" placeholder="A few words about your project, location and timeline…"></textarea>
+                    </div>
+                    <button type="submit" class="submit" data-magnetic>
+                        Send Enquiry <span class="arrow" aria-hidden="true">→</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
+    <footer class="footer" aria-label="Site footer">
+        <div class="wrap">
+            <div class="footer__cols">
+                <div class="footer__bio">
+                    <h4>The Mystic Canvas</h4>
+                    <p>An interior design studio crafting warm, characterful Indian interiors — based in Indore.</p>
+                </div>
+                <div class="footer__col">
+                    <h4>Navigate</h4>
+                    <a href="#collections">Collections</a>
+                    <a href="#studio">Studio</a>
+                    <a href="#index">Index</a>
+                    <a href="#gallery">Gallery</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Connect</h4>
+                    <a href="https://www.instagram.com/themystic_canvas/">Instagram</a>
+                    <a href="mailto:design@themysticcanvas.com">Email</a>
+                    <a href="tel:+918989029494">Telephone</a>
+                </div>
+                <div class="footer__col">
+                    <h4>Studio</h4>
+                    <p>Indore</p>
+                    <p>Madhya Pradesh</p>
+                    <p>India</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__word" aria-hidden="true">Mystic&nbsp;<em>Canvas</em></div>
+
+        <div class="wrap">
+            <div class="footer__base">
+                <span>&copy; 2026 The Mystic Canvas — All rights reserved</span>
+                <span>Indore <span data-clock>--:--:--</span></span>
+                <a href="#top" class="to-top">Back to top <span class="arrow" aria-hidden="true">↑</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+         SCRIPTS
+    ============================================================ -->
+    <script>
+    (function () {
+        'use strict';
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        var hasGSAP = !!(window.gsap);
+        var hasST = !!(window.ScrollTrigger);
+        var lerp = function (a, b, n) { return a + (b - a) * n; };
+        if (hasGSAP && hasST) { gsap.registerPlugin(ScrollTrigger); }
+
+        /* ---- Live Indore clock (IST) ------------------------------- */
+        try {
+            var fmt = new Intl.DateTimeFormat('en-GB', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit',
+                hour12: false, timeZone: 'Asia/Kolkata'
+            });
+            var clocks = document.querySelectorAll('[data-clock]');
+            var tick = function () {
+                var t = fmt.format(new Date());
+                for (var i = 0; i < clocks.length; i++) clocks[i].textContent = t;
+            };
+            tick(); setInterval(tick, 1000);
+        } catch (e) { /* leave placeholder */ }
+
+        /* ---- Sticky header state ----------------------------------- */
+        var head = document.getElementById('siteHead');
+        var onScroll = function () { head.classList.toggle('is-scrolled', window.scrollY > 40); };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        /* ---- Reduced motion: pause ambient video ------------------- */
+        var heroVideo = document.getElementById('heroVideo');
+        if (reduced && heroVideo) { try { heroVideo.pause(); } catch (e) {} }
+
+        /* ============================================================
+           CINEMATIC SCROLL (GSAP ScrollTrigger) — IO fallback
+        ============================================================ */
+        if (hasGSAP && hasST && !reduced) {
+            ScrollTrigger.batch('[data-reveal]', {
+                start: 'top 88%',
+                onEnter: function (els) { els.forEach(function (el) { el.classList.add('in'); }); }
+            });
+            gsap.to('.hero__title', {
+                yPercent: 16, opacity: 0.5, ease: 'none',
+                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+            });
+            gsap.to('.hero__media video', {
+                scale: 1.14, ease: 'none',
+                scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+            });
+            gsap.fromTo('[data-anim="stage"]',
+                { opacity: 0, scale: 0.93 },
+                { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out',
+                  scrollTrigger: { trigger: '#collections', start: 'top 70%' } });
+            document.querySelectorAll('.frame').forEach(function (fr) {
+                var media = fr.querySelector('.frame__media');
+                var img = fr.querySelector('img');
+                if (media && fr.getAttribute('data-anim') === 'wipe') {
+                    gsap.to(media, {
+                        clipPath: 'inset(0 0 0% 0)', duration: 1.15, ease: 'power3.out',
+                        scrollTrigger: { trigger: fr, start: 'top 86%' }
+                    });
+                }
+                if (img) {
+                    gsap.fromTo(img, { yPercent: -8, scale: 1.12 }, {
+                        yPercent: 8, ease: 'none',
+                        scrollTrigger: { trigger: fr, start: 'top bottom', end: 'bottom top', scrub: true }
+                    });
+                }
+            });
+        } else {
+            var revealEls = document.querySelectorAll('[data-reveal]');
+            if ('IntersectionObserver' in window && !reduced) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (en) {
+                        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+                revealEls.forEach(function (el) { io.observe(el); });
+            } else {
+                revealEls.forEach(function (el) { el.classList.add('in'); });
+            }
+        }
+
+        /* ---- Active nav link --------------------------------------- */
+        var navMap = {};
+        document.querySelectorAll('.nav-links a').forEach(function (a) { navMap[a.getAttribute('href').slice(1)] = a; });
+        if ('IntersectionObserver' in window) {
+            var navIo = new IntersectionObserver(function (entries) {
+                entries.forEach(function (en) {
+                    var link = navMap[en.target.id];
+                    if (link && en.isIntersecting) {
+                        Object.keys(navMap).forEach(function (k) { navMap[k].removeAttribute('aria-current'); });
+                        link.setAttribute('aria-current', 'true');
+                    }
+                });
+            }, { threshold: 0.5 });
+            document.querySelectorAll('section[id]').forEach(function (s) { if (navMap[s.id]) navIo.observe(s); });
+        }
+
+        /* ============================================================
+           OPTION CARDS → media showcase (Three.js warp + fallback)
+        ============================================================ */
+        (function initSwitcher() {
+            var stage = document.getElementById('stage');
+            if (!stage) return;
+
+            var buttons = Array.prototype.slice.call(document.querySelectorAll('.opt'));
+            var imgs = Array.prototype.slice.call(document.querySelectorAll('.stage__img'));
+            var video = document.getElementById('stageVideo');
+            var badge = document.getElementById('stageBadge');
+            var tag = document.getElementById('stageTag');
+            var capName = document.getElementById('capName');
+            var capMeta = document.getElementById('capMeta');
+
+            var CATS = [
+                { name: 'Residential Sanctuaries', short: 'Residential', meta: 'Living Spaces · Indore' },
+                { name: 'Bespoke Bedrooms',        short: 'Bedrooms',    meta: 'Private Retreats · Indore' },
+                { name: 'Artisan Detailing',       short: 'Detailing',   meta: 'Craft & Thresholds · Indore' },
+                { name: 'Lounge & Leisure',        short: 'Lounge',      meta: 'Slow Living · Indore', video: true }
+            ];
+            var current = 0, useGL = false, gl = null;
+
+            function buildGL() {
+                if (!window.THREE || !hasGSAP) return null;
+                var srcs = imgs.map(function (im) { return im.getAttribute('src'); });
+                var canvas, renderer;
+                try {
+                    canvas = document.createElement('canvas');
+                    canvas.className = 'stage__canvas';
+                    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+                } catch (e) { return null; }
+                if (!renderer || !renderer.getContext()) return null;
+
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                var scene = new THREE.Scene();
+                var cam = new THREE.Camera();
+                var uniforms = {
+                    uTex0: { value: null }, uTex1: { value: null }, uProgress: { value: 0 },
+                    uPlaneAspect: { value: 1 }, uAspect0: { value: 1 }, uAspect1: { value: 1 }
+                };
+                var vert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
+                var frag = [
+                    'precision highp float;',
+                    'varying vec2 vUv;',
+                    'uniform sampler2D uTex0; uniform sampler2D uTex1;',
+                    'uniform float uProgress; uniform float uPlaneAspect; uniform float uAspect0; uniform float uAspect1;',
+                    'vec2 coverUV(vec2 uv, float pa, float ia){',
+                    '  vec2 s = (ia > pa) ? vec2(pa/ia, 1.0) : vec2(1.0, ia/pa);',
+                    '  return (uv - 0.5) * s + 0.5;',
+                    '}',
+                    'void main(){',
+                    '  float p = clamp(uProgress, 0.0, 1.0);',
+                    '  vec2 dir = vUv - 0.5;',
+                    '  vec2 uv0 = coverUV(vUv + dir * p * 0.35, uPlaneAspect, uAspect0);',
+                    '  vec2 uv1 = coverUV(vUv - dir * (1.0 - p) * 0.35, uPlaneAspect, uAspect1);',
+                    '  vec4 c0 = texture2D(uTex0, uv0);',
+                    '  float split = sin(p * 3.14159) * 0.012;',
+                    '  vec4 c1 = texture2D(uTex1, uv1);',
+                    '  c1.r = texture2D(uTex1, uv1 + vec2(split, 0.0)).r;',
+                    '  c1.b = texture2D(uTex1, uv1 - vec2(split, 0.0)).b;',
+                    '  float m = smoothstep(0.2, 0.85, p);',
+                    '  gl_FragColor = mix(c0, c1, m);',
+                    '}'
+                ].join('\n');
+
+                var material = new THREE.ShaderMaterial({ uniforms: uniforms, vertexShader: vert, fragmentShader: frag });
+                scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+
+                var loader = new THREE.TextureLoader();
+                function loadTex(src) {
+                    return new Promise(function (res) {
+                        loader.load(src, function (t) {
+                            t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter;
+                            t.generateMipmaps = false; t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+                            var iw = (t.image && (t.image.naturalWidth || t.image.width)) || 1;
+                            var ih = (t.image && (t.image.naturalHeight || t.image.height)) || 1;
+                            res({ tex: t, aspect: iw / ih });
+                        }, undefined, function () { res(null); });
+                    });
+                }
+
+                var glObj = { canvas: canvas, renderer: renderer, scene: scene, cam: cam, uniforms: uniforms, textures: [], needsRender: true, raf: 0 };
+                function size() {
+                    var r = stage.getBoundingClientRect();
+                    if (r.width === 0) return;
+                    renderer.setSize(r.width, r.height, false);
+                    uniforms.uPlaneAspect.value = r.width / r.height; glObj.needsRender = true;
+                }
+                glObj.size = size;
+                function loop() {
+                    if (glObj.needsRender) { renderer.render(scene, cam); glObj.needsRender = false; }
+                    glObj.raf = requestAnimationFrame(loop);
+                }
+
+                Promise.all(srcs.map(loadTex)).then(function (texs) {
+                    if (!texs[0]) return;
+                    glObj.textures = texs;
+                    uniforms.uTex0.value = texs[0].tex; uniforms.uTex1.value = texs[0].tex;
+                    uniforms.uAspect0.value = texs[0].aspect; uniforms.uAspect1.value = texs[0].aspect;
+                    stage.insertBefore(canvas, stage.firstChild);
+                    stage.classList.add('stage--gl');
+                    useGL = true; gl = glObj; size(); loop();
+                    window.addEventListener('resize', size, { passive: true });
+                });
+                return glObj;
+            }
+
+            function glTo(i) {
+                if (!gl || !gl.textures[i]) { cssTo(i); return; }
+                var t = gl.textures[i];
+                gl.uniforms.uTex1.value = t.tex; gl.uniforms.uAspect1.value = t.aspect;
+                gsap.fromTo(gl.uniforms.uProgress, { value: 0 }, {
+                    value: 1, duration: 1.05, ease: 'power2.inOut',
+                    onUpdate: function () { gl.needsRender = true; },
+                    onComplete: function () {
+                        gl.uniforms.uTex0.value = t.tex; gl.uniforms.uAspect0.value = t.aspect;
+                        gl.uniforms.uProgress.value = 0; gl.needsRender = true;
+                    }
+                });
+            }
+            function cssTo(i) {
+                imgs.forEach(function (im, idx) { im.classList.toggle('is-show', idx === i); });
+                if (hasGSAP && !reduced) {
+                    gsap.fromTo(stage, { rotationY: -9, scale: 0.97 }, { rotationY: 0, scale: 1, duration: 0.9, ease: 'power3.out', clearProps: 'transform' });
+                }
+            }
+            function setVideo(on) {
+                if (!video) return;
+                if (on) {
+                    video.classList.add('is-show');
+                    if (badge) badge.classList.add('is-show');
+                    var pr = video.play(); if (pr && pr.catch) pr.catch(function () {});
+                } else {
+                    video.classList.remove('is-show');
+                    if (badge) badge.classList.remove('is-show');
+                    try { video.pause(); } catch (e) {}
+                }
+            }
+            function activate(i) {
+                if (i === current) return;
+                buttons.forEach(function (b, idx) {
+                    b.classList.toggle('is-active', idx === i);
+                    b.setAttribute('aria-selected', idx === i ? 'true' : 'false');
+                });
+                var c = CATS[i], num = ('0' + (i + 1)).slice(-2);
+                var setText = function () {
+                    if (tag) tag.textContent = num + ' — ' + c.short;
+                    if (capName) capName.textContent = c.name;
+                    if (capMeta) capMeta.textContent = c.meta;
+                };
+                if (hasGSAP && !reduced) {
+                    gsap.fromTo([capName, capMeta, tag].filter(Boolean), { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', onStart: setText });
+                } else { setText(); }
+                if (useGL) { glTo(i); } else { cssTo(i); }
+                setVideo(!!c.video);
+                current = i;
+            }
+
+            buttons.forEach(function (b, i) { b.addEventListener('click', function () { activate(i); }); });
+            var optsEl = document.getElementById('opts');
+            if (optsEl) {
+                optsEl.addEventListener('keydown', function (e) {
+                    if (['ArrowDown','ArrowUp','ArrowRight','ArrowLeft'].indexOf(e.key) === -1) return;
+                    e.preventDefault();
+                    var dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
+                    var next = (current + dir + buttons.length) % buttons.length;
+                    buttons[next].focus(); activate(next);
+                });
+            }
+            buildGL();
+        })();
+
+        /* ============================================================
+           3D HOVER / TILT — engraved cards, framed showcase, gallery
+        ============================================================ */
+        if (fine && !reduced) {
+            var addTilt = function (el, strength) {
+                if (!el) return;
+                var setRY, setRX;
+                if (hasGSAP) {
+                    setRY = gsap.quickTo(el, 'rotationY', { duration: 0.6, ease: 'power3' });
+                    setRX = gsap.quickTo(el, 'rotationX', { duration: 0.6, ease: 'power3' });
+                    gsap.set(el, { transformPerspective: 1100, transformOrigin: 'center' });
+                }
+                el.addEventListener('mousemove', function (e) {
+                    var r = el.getBoundingClientRect();
+                    var nx = (e.clientX - (r.left + r.width / 2)) / r.width;
+                    var ny = (e.clientY - (r.top + r.height / 2)) / r.height;
+                    var ry = nx * strength, rx = -ny * strength;
+                    if (hasGSAP) { setRY(ry); setRX(rx); }
+                    else { el.style.transform = 'perspective(1100px) rotateY(' + ry + 'deg) rotateX(' + rx + 'deg)'; }
+                });
+                el.addEventListener('mouseleave', function () {
+                    if (hasGSAP) { setRY(0); setRX(0); } else { el.style.transform = ''; }
+                });
+            };
+            addTilt(document.querySelector('.showcase'), 6);
+            document.querySelectorAll('.opt').forEach(function (card) { addTilt(card, 5); });
+            document.querySelectorAll('.frame[data-tilt]').forEach(function (fr) {
+                addTilt(fr.querySelector('.frame__media'), parseFloat(fr.getAttribute('data-tilt')) || 4);
+            });
+        }
+
+        /* ============================================================
+           CUSTOM CURSOR
+        ============================================================ */
+        if (fine && !reduced) {
+            document.documentElement.classList.add('cursor-on');
+            var ring = document.getElementById('cursorRing');
+            var dot = document.getElementById('cursorDot');
+            var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my;
+            window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+            var hoverSel = 'a, button, input, textarea, select, .index__row, [data-cursor], [data-magnetic]';
+            document.querySelectorAll(hoverSel).forEach(function (el) {
+                el.addEventListener('mouseenter', function () { ring.classList.add('is-hover'); });
+                el.addEventListener('mouseleave', function () { ring.classList.remove('is-hover'); });
+            });
+            (function loop() {
+                rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
+                ring.style.transform = 'translate(' + (rx - 19) + 'px,' + (ry - 19) + 'px)';
+                dot.style.transform = 'translate(' + (mx - 2.5) + 'px,' + (my - 2.5) + 'px)';
+                requestAnimationFrame(loop);
+            })();
+        }
+
+        /* ============================================================
+           INDEX PREVIEW FOLLOWER
+        ============================================================ */
+        var rows = document.querySelectorAll('.index__row');
+        var preview = document.getElementById('preview');
+        if (fine && rows.length) {
+            rows.forEach(function (r) { var src = r.getAttribute('data-img'); if (src) { var im = new Image(); im.src = src; } });
+            var px = window.innerWidth / 2, py = window.innerHeight / 2, tx = px, ty = py, active = false, raf = null;
+            var ringEl = document.getElementById('cursorRing'), dotEl = document.getElementById('cursorDot');
+            var move = function (e) { tx = e.clientX; ty = e.clientY; };
+            var animate = function () {
+                px = lerp(px, tx, 0.12); py = lerp(py, ty, 0.12);
+                var scale = active ? 1 : 0.92;
+                preview.style.transform = 'translate(' + px + 'px,' + py + 'px) translate(-50%,-50%) scale(' + scale + ')';
+                if (active || Math.abs(px - tx) > 0.4) { raf = requestAnimationFrame(animate); } else { raf = null; }
+            };
+            rows.forEach(function (row) {
+                row.addEventListener('mouseenter', function () {
+                    var src = row.getAttribute('data-img'); if (!src) return;
+                    preview.style.backgroundImage = 'url("' + src + '")';
+                    active = true; preview.style.opacity = '1';
+                    if (ringEl) ringEl.classList.add('is-hide'); if (dotEl) dotEl.classList.add('is-hide');
+                    if (!raf) raf = requestAnimationFrame(animate);
+                });
+                row.addEventListener('mouseleave', function () {
+                    active = false; preview.style.opacity = '0';
+                    if (ringEl) ringEl.classList.remove('is-hide'); if (dotEl) dotEl.classList.remove('is-hide');
+                });
+            });
+            window.addEventListener('mousemove', move, { passive: true });
+        }
+
+        /* ============================================================
+           MAGNETIC ELEMENTS
+        ============================================================ */
+        if (fine && !reduced) {
+            document.querySelectorAll('[data-magnetic]').forEach(function (el) {
+                el.addEventListener('mousemove', function (e) {
+                    var r = el.getBoundingClientRect();
+                    var x = e.clientX - (r.left + r.width / 2), y = e.clientY - (r.top + r.height / 2);
+                    el.style.transform = 'translate(' + (x * 0.22) + 'px,' + (y * 0.3) + 'px)';
+                });
+                el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+            });
+        }
+
+        /* ---- Keep ScrollTrigger in sync once media/fonts settle ----- */
+        if (hasGSAP && hasST) {
+            window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+            if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { ScrollTrigger.refresh(); }); }
+        }
+    })();
+    </script>
 
 </body>
 </html>
