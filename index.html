@@ -44,8 +44,8 @@
             --terra:      #BF5E39;  /* warm terracotta — vibrant pop */
             --sage:       #7E9072;  /* muted sage — cool accent */
 
-            --line:      rgba(35, 32, 26, 0.13);
-            --line-soft: rgba(35, 32, 26, 0.07);
+            --line:      rgba(26, 26, 26, 0.14);   /* 1px structural blueprint line — #1A1A1A, low opacity */
+            --line-soft: rgba(26, 26, 26, 0.07);
 
             /* Tactile (neumorphic) shadow stops — warm-tinted */
             --sh-hi:   rgba(255, 255, 255, 0.92);
@@ -147,13 +147,16 @@
         .cursor-on .cursor-dot { opacity: 1; }
 
         .cursor-ring {
-            width: 38px; height: 38px;
+            width: 36px; height: 36px;
             border: 1px solid #fff;
-            transition: width 0.35s var(--ease), height 0.35s var(--ease),
-                        background-color 0.35s var(--ease), opacity 0.4s ease;
+            transition: width 0.4s var(--ease), height 0.4s var(--ease),
+                        background-color 0.4s var(--ease), border-color 0.4s var(--ease), opacity 0.4s ease;
         }
-        .cursor-dot { width: 5px; height: 5px; background: #fff; }
-        .cursor-ring.is-hover { width: 64px; height: 64px; background: rgba(255,255,255,0.10); }
+        .cursor-dot { width: 6px; height: 6px; background: #fff; }
+        /* generic interactive hover → filled disc (inverts via difference blend) */
+        .cursor-ring.is-hover { width: 58px; height: 58px; background: #fff; border-color: #fff; }
+        /* magnetic snap (nav links + 3D cards) → larger outlined ring locked on the element */
+        .cursor-ring.is-snap  { width: 76px; height: 76px; background: transparent; border-color: #fff; }
         .cursor-ring.is-hide  { opacity: 0; }
         .cursor-dot.is-hide   { opacity: 0; }
 
@@ -184,11 +187,25 @@
         .sec-head__no   { color: var(--brass); }
         .sec-head__name { color: var(--ink); }
         .sec-head__meta { margin-left: auto; text-align: right; color: var(--ink-mute); }
+        .sec-head--tight { margin-bottom: 1.5rem; }
+
+        /* Blueprint data strip — widely spaced micro-labels between structural lines */
+        .data-strip {
+            display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.8rem 2rem;
+            padding: 1rem 0;
+            margin-bottom: clamp(3rem, 7vw, 5.5rem);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.26em;
+            text-transform: uppercase; color: var(--ink-mute);
+        }
+        .data-strip span { white-space: nowrap; }
+        .data-strip strong { color: var(--ink); font-weight: 500; }
 
         /* Reveal-on-scroll */
         [data-reveal] {
             opacity: 0;
-            transform: translateY(26px);
+            transform: translateY(28px) scale(0.985);   /* fade + slide-up + settle-in scale */
             transition: opacity 1s var(--ease), transform 1s var(--ease);
             transition-delay: calc(var(--i, 0) * 75ms);
         }
@@ -258,56 +275,66 @@
         }
 
         /* ============================================================
-           HERO — typographic, sunlit video backdrop
+           HERO — asymmetric editorial split (alabaster text | framed film)
         ============================================================ */
         .hero {
-            position: relative; min-height: 100svh;
-            display: flex; flex-direction: column; justify-content: space-between;
-            padding: clamp(7rem, 14vh, 11rem) var(--pad-x) clamp(2rem, 5vh, 3.5rem);
-            z-index: 2; overflow: hidden;
+            position: relative;
+            min-height: 100svh;
+            display: grid;
+            grid-template-columns: 1.22fr 0.78fr;   /* wide alabaster column · narrow film column */
+            z-index: 2;
         }
-        .hero__media { position: absolute; inset: 0; z-index: -3; overflow: hidden; }
-        .hero__media video {
+        .hero__pane { position: relative; display: flex; }
+        .hero__pane--text {
+            flex-direction: column;
+            justify-content: space-between;
+            gap: clamp(2rem, 5vh, 3.5rem);
+            padding: clamp(7rem, 14vh, 11rem) clamp(2rem, 4vw, 4.5rem) clamp(2rem, 5vh, 3.5rem) var(--pad-x);
+            border-right: 1px solid var(--line);     /* blueprint divider between panes */
+        }
+        .hero__pane--media {
+            padding: clamp(6.5rem, 12vh, 9.5rem) var(--pad-x) clamp(2rem, 5vh, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+        }
+        .hero__frame {
+            position: relative; flex: 1 1 auto; min-height: 58vh;
+            overflow: hidden;
+            border: 1px solid rgba(26, 26, 26, 0.5);   /* sharp architectural frame */
+            background: var(--bg-sink);
+        }
+        .hero__frame video {
             width: 100%; height: 100%; object-fit: cover;
-            filter: saturate(1.12) brightness(1.04) contrast(1.02);
+            filter: saturate(1.08) contrast(1.02);
             will-change: transform;
         }
-        /* Cream wash keeps charcoal type crisp while the footage stays bright */
-        .hero__scrim {
-            position: absolute; inset: 0; z-index: -2;
-            background:
-                linear-gradient(102deg, rgba(253,251,247,0.95) 0%, rgba(253,251,247,0.80) 34%, rgba(253,251,247,0.50) 68%, rgba(253,251,247,0.36) 100%),
-                linear-gradient(to top, rgba(253,251,247,0.92) 0%, rgba(253,251,247,0) 26%, rgba(253,251,247,0) 72%, rgba(253,251,247,0.55) 100%);
-        }
-        .hero::before {
-            content: ''; position: absolute; top: 4%; left: 58%;
-            width: 80vw; height: 80vw; max-width: 1000px; max-height: 1000px;
-            transform: translateX(-50%);
-            background: radial-gradient(circle, rgba(255, 240, 214, 0.55) 0%, rgba(255, 240, 214, 0.12) 38%, transparent 64%);
-            pointer-events: none; z-index: -1;
+        .hero__frame-cap {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            display: flex; justify-content: space-between; gap: 1rem;
+            padding: 0.7rem 0.9rem;
+            background: rgba(250, 248, 245, 0.85);
+            backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+            border-top: 1px solid var(--line);
+            font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em;
+            text-transform: uppercase; color: var(--ink-mute);
         }
 
         .hero__top { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; flex-wrap: wrap; }
-        .hero__index {
-            font-family: var(--mono); font-size: 0.7rem;
-            letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute);
-        }
+        .hero__index { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); }
 
         .hero__title {
             font-family: var(--serif); font-optical-sizing: auto; font-weight: 300;
-            font-size: clamp(3.4rem, 12.5vw, 13rem);
-            line-height: 0.92; letter-spacing: -0.02em; color: var(--ink);
-            margin-block: auto clamp(1.5rem, 4vh, 3rem); will-change: transform;
+            font-size: clamp(2.6rem, 7.6vw, 7.6rem);
+            line-height: 0.94; letter-spacing: -0.02em; color: var(--ink);
+            margin: 0; will-change: transform;
         }
         .hero__title .line { display: block; overflow: hidden; padding-block: 0.1em; margin-block: -0.1em; }
         .hero__title .line__in { display: block; transform: translateY(112%); }
         .hero__title em { font-style: italic; font-weight: 300; color: var(--terra); }
         .hero__title .dot-accent { color: var(--brass); font-style: normal; }
 
-        .hero__foot { display: flex; justify-content: space-between; align-items: flex-end; gap: clamp(1.5rem, 5vw, 4rem); flex-wrap: wrap; }
+        .hero__foot { display: flex; justify-content: space-between; align-items: flex-end; gap: clamp(1.5rem, 4vw, 3rem); flex-wrap: wrap; }
         .hero__lede {
-            max-width: 42ch; color: var(--ink-soft);
-            font-size: clamp(0.95rem, 1.15vw, 1.1rem); line-height: 1.65;
+            max-width: 36ch; color: var(--ink-soft);
+            font-size: clamp(0.92rem, 1.05vw, 1.02rem); line-height: 1.6;
             order: 2; margin-left: auto;
         }
         .hero__lede em { color: var(--ink); font-style: italic; }
@@ -358,24 +385,34 @@
             width: 100%; text-align: left; cursor: pointer;
             padding: clamp(0.9rem, 1.7vw, 1.4rem) clamp(1rem, 1.9vw, 1.5rem);
             border-radius: 16px;
-            background: linear-gradient(145deg, #FFFFFF 0%, #F1E9DC 100%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            /* resting — carved INTO the alabaster wall (inset depth) */
+            background: linear-gradient(145deg, #EEE6D8 0%, #FAF6EE 100%);
+            border: 1px solid rgba(26, 26, 26, 0.05);
             box-shadow:
-                -7px -7px 16px var(--sh-hi),
-                9px 9px 22px var(--sh-lo),
-                inset 0 0 0 1px rgba(35, 32, 26, 0.04);
+                inset 6px 6px 13px var(--sh-lo),
+                inset -6px -6px 13px var(--sh-hi);
             color: var(--ink);
+            position: relative; overflow: hidden;
             transform-style: preserve-3d; will-change: transform;
             transition: box-shadow 0.45s var(--ease), background 0.45s var(--ease), border-color 0.45s var(--ease);
         }
-        .opt:hover { box-shadow: -9px -9px 20px var(--sh-hi), 14px 14px 30px var(--sh-lo); }
-        .opt:active { box-shadow: inset 4px 4px 10px var(--sh-lo), inset -4px -4px 10px var(--sh-hi); }
+        .opt:hover { box-shadow: inset 4px 4px 9px var(--sh-lo), inset -4px -4px 9px var(--sh-hi); }
+        /* light-catch sheen — follows the cursor (--mx/--my set by the tilt handler) */
+        .opt::after {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+            background: radial-gradient(160px 160px at var(--mx, 50%) var(--my, 50%), rgba(255, 246, 228, 0.55), rgba(255, 246, 228, 0) 62%);
+            opacity: 0; transition: opacity 0.45s var(--ease); mix-blend-mode: soft-light;
+        }
+        .opt:hover::after { opacity: 1; }
+        /* pressing deepens the carve */
+        .opt:active { box-shadow: inset 8px 8px 15px var(--sh-lo), inset -8px -8px 15px var(--sh-hi); }
+        /* selected — lifts elegantly PROUD of the wall (outset) with a brass edge */
         .opt.is-active {
-            background: linear-gradient(145deg, #ECE3D4 0%, #FBF7F0 100%);
-            border-color: rgba(163, 126, 60, 0.45);
+            background: linear-gradient(145deg, #FFFFFF 0%, #F3ECDE 100%);
+            border-color: rgba(163, 126, 60, 0.5);
             box-shadow:
-                inset 6px 6px 13px rgba(150, 122, 88, 0.32),
-                inset -6px -6px 13px rgba(255, 255, 255, 0.95);
+                -9px -9px 20px var(--sh-hi),
+                12px 12px 28px var(--sh-lo);
         }
 
         .opt__chip {
@@ -544,14 +581,42 @@
         .preview::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(35, 32, 26, 0.14); }
 
         /* ============================================================
-           GALLERY — fine art, full saturation, sunlit framing
+           GALLERY — overlapping editorial spreads (architectural)
         ============================================================ */
-        .gallery__flow { display: flex; flex-direction: column; gap: clamp(4rem, 11vw, 10rem); }
-        .frame { width: 100%; perspective: 1000px; }
-        .frame--wide   { width: min(100%, 1120px); margin-inline: auto; }
-        .frame--left   { width: min(76%, 700px);  margin-right: auto; }
-        .frame--right  { width: min(76%, 700px);  margin-left: auto; }
-        .frame--narrow { width: min(58%, 520px);  margin-inline: auto; }
+        .gallery__flow { display: flex; flex-direction: column; gap: clamp(5rem, 12vw, 11rem); }
+
+        .spread { position: relative; }
+        .spread__block { position: absolute; z-index: 0; pointer-events: none; }
+        .spread__block--sage  { background: rgba(126, 144, 114, 0.16); }
+        .spread__block--cream { background: var(--bg-warm); }
+        .spread__block--terra { background: rgba(191, 94, 57, 0.10); }
+
+        .spread__tag {
+            position: absolute; z-index: 2; top: -1.7rem;
+            font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.3em;
+            text-transform: uppercase; color: var(--ink-mute);
+        }
+        .spread__tag--left  { left: 0; }
+        .spread__tag--right { right: 0; text-align: right; }
+
+        .frame { position: relative; z-index: 1; width: 100%; perspective: 1000px; }
+
+        /* Spread 1 — feature image overlapping a tinted block (right) */
+        .spread--feature .spread__block { top: 9%; right: 0; width: 46%; height: 82%; }
+        .spread--feature .frame { width: min(72%, 880px); }
+
+        /* Spread 2 — two staggered frames over a cream block */
+        .spread--pair { display: flex; align-items: flex-start; gap: clamp(1.5rem, 4vw, 4rem); }
+        .spread--pair .spread__block { top: 14%; left: 6%; width: 40%; height: 74%; }
+        .spread--pair .frame--a { width: 54%; }
+        .spread--pair .frame--b { width: 38%; margin-top: clamp(3rem, 10vw, 10rem); }
+
+        /* Spread 3 — offset image pushed right, over a tinted block (left) */
+        .spread--offset .spread__block { top: 7%; left: 0; width: 44%; height: 84%; }
+        .spread--offset .frame { width: min(70%, 840px); margin-left: auto; }
+
+        /* Spread 4 — narrow solo, indented */
+        .spread--solo .frame { width: min(48%, 480px); margin-left: clamp(2rem, 14vw, 16rem); }
 
         .frame__media {
             overflow: hidden; position: relative;
@@ -577,9 +642,9 @@
         }
         .frame:hover .frame__media img { filter: saturate(1.12) contrast(1.03); }
 
-        .frame--wide .frame__media   { aspect-ratio: 16 / 10; }
-        .frame--left .frame__media,
-        .frame--right .frame__media  { aspect-ratio: 4 / 5; }
+        .frame--lg .frame__media     { aspect-ratio: 3 / 2; }
+        .frame--a .frame__media      { aspect-ratio: 4 / 5; }
+        .frame--b .frame__media      { aspect-ratio: 3 / 4; }
         .frame--narrow .frame__media { aspect-ratio: 3 / 4; }
 
         .frame__cap {
@@ -705,6 +770,18 @@
             .contact__grid { grid-template-columns: 1fr; }
             .footer__cols { grid-template-columns: 1fr 1fr; gap: 2.5rem 2rem; }
             .footer__bio { grid-column: 1 / -1; }
+
+            /* hero → stacked panes */
+            .hero { grid-template-columns: 1fr; }
+            .hero__pane--text { border-right: none; border-bottom: 1px solid var(--line); }
+            .hero__pane--media { padding: clamp(1.5rem, 6vw, 3rem) var(--pad-x) clamp(2.5rem, 8vw, 4rem); }
+            .hero__frame { min-height: 54vh; }
+
+            /* gallery spreads → clean stacked, structural blocks off */
+            .spread--pair { flex-direction: column; gap: clamp(2.5rem, 8vw, 4rem); }
+            .spread .frame { width: 100%; margin: 0; }
+            .spread__block { display: none; }
+            .spread__tag { position: static; display: block; margin: 0 0 0.9rem; text-align: left; }
         }
 
         @media (max-width: 720px) {
@@ -723,7 +800,6 @@
             .stats { grid-template-columns: 1fr; }
             .stat + .stat { padding-left: 0; border-left: none; }
 
-            .frame--left, .frame--right, .frame--narrow, .frame--wide { width: 100%; }
             .footer__cols { grid-template-columns: 1fr; }
         }
 
@@ -780,37 +856,47 @@
     </header>
 
     <!-- ============================================================
-         HERO — typographic, sunlit video backdrop
-         ASSET: images/Hero Video.mp4
+         HERO — asymmetric split: alabaster editorial column | framed film
+         ASSET: images/Hero Video.mp4  (note: real filename has a space)
     ============================================================ -->
     <section class="hero" id="top" aria-label="Introduction">
-        <div class="hero__media" aria-hidden="true">
-            <video id="heroVideo" autoplay muted loop playsinline preload="metadata"
-                   poster="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg">
-                <source src="images/Hero%20Video.mp4" type="video/mp4">
-            </video>
+
+        <!-- Left pane — wide alabaster editorial column -->
+        <div class="hero__pane hero__pane--text">
+            <div class="hero__top">
+                <span class="hero__index">Interior Design Studio</span>
+                <span class="hero__index">Indore · 22.72°N 75.86°E</span>
+            </div>
+
+            <h1 class="hero__title reveal-line">
+                <span class="line"><span class="line__in">Spaces that</span></span>
+                <span class="line"><span class="line__in">hold the <em>light</em><span class="dot-accent">.</span></span></span>
+            </h1>
+
+            <div class="hero__foot">
+                <a href="#collections" class="scroll-cue" aria-label="Scroll to collections">
+                    Scroll<span class="scroll-cue__line"></span>
+                </a>
+                <p class="hero__lede">
+                    An Indore-based interior design studio crafting warm, characterful
+                    Indian interiors — layered with natural wood, terracotta jaali, cane
+                    and <em>jewel-toned colour</em>.
+                </p>
+            </div>
         </div>
-        <div class="hero__scrim" aria-hidden="true"></div>
 
-        <div class="hero__top">
-            <span class="hero__index">Interior Design Studio</span>
-            <span class="hero__index">Indore · India</span>
-        </div>
-
-        <h1 class="hero__title reveal-line">
-            <span class="line"><span class="line__in">Spaces that</span></span>
-            <span class="line"><span class="line__in">hold the <em>light</em><span class="dot-accent">.</span></span></span>
-        </h1>
-
-        <div class="hero__foot">
-            <a href="#collections" class="scroll-cue" aria-label="Scroll to collections">
-                Scroll<span class="scroll-cue__line"></span>
-            </a>
-            <p class="hero__lede">
-                An Indore-based interior design studio crafting warm, characterful
-                Indian interiors — layered with natural wood, terracotta jaali, cane
-                and <em>jewel-toned colour</em>.
-            </p>
+        <!-- Right pane — sharply framed vertical film -->
+        <div class="hero__pane hero__pane--media">
+            <figure class="hero__frame">
+                <video id="heroVideo" autoplay muted loop playsinline preload="metadata"
+                       poster="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg">
+                    <source src="images/Hero%20Video.mp4" type="video/mp4">
+                </video>
+                <figcaption class="hero__frame-cap">
+                    <span>Fig. 01 — Motion Study</span>
+                    <span>Reel / 2025</span>
+                </figcaption>
+            </figure>
         </div>
     </section>
 
@@ -969,11 +1055,17 @@
     ============================================================ -->
     <section class="sec" id="index" aria-label="Project index">
         <div class="wrap">
-            <header class="sec-head">
+            <header class="sec-head sec-head--tight">
                 <span class="sec-head__no">03</span>
                 <span class="sec-head__name">Index</span>
                 <span class="sec-head__meta">Selected Works · 2021–2025</span>
             </header>
+            <div class="data-strip">
+                <span><strong>06</strong> Projects</span>
+                <span>2021 — 2025</span>
+                <span>Residential · Hospitality</span>
+                <span>Indore, IN</span>
+            </div>
 
             <ul class="index__list" id="indexList">
                 <li class="index__row" data-img="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg">
@@ -1039,47 +1131,73 @@
     ============================================================ -->
     <section class="sec" id="gallery" aria-label="Gallery">
         <div class="wrap">
-            <header class="sec-head">
+            <header class="sec-head sec-head--tight">
                 <span class="sec-head__no">04</span>
                 <span class="sec-head__name">Gallery</span>
                 <span class="sec-head__meta">Selected Frames</span>
             </header>
+            <div class="data-strip">
+                <span><strong>05</strong> Frames</span>
+                <span>Scale 1:1</span>
+                <span>9 — 38 SQM</span>
+                <span>Indore, IN</span>
+            </div>
 
             <div class="gallery__flow">
-                <figure class="frame frame--wide" data-anim="wipe" data-tilt="4">
-                    <div class="frame__media">
-                        <img src="images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg" alt="Carved teak entrance door beside a teal door and peacock chinoiserie wallpaper, Indore" loading="lazy">
-                    </div>
-                    <figcaption class="frame__cap"><strong>Peacock Foyer</strong><span>Indore — 2024</span></figcaption>
-                </figure>
 
-                <figure class="frame frame--left" data-anim="wipe" data-tilt="5">
-                    <div class="frame__media">
-                        <img src="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg" alt="Master bedroom with teal channel-tufted headboard and bench, Indore" loading="lazy">
-                    </div>
-                    <figcaption class="frame__cap"><strong>The Teal Master Suite</strong><span>Indore — 2023</span></figcaption>
-                </figure>
+                <!-- Spread 01 — feature image overlapping a tinted structural block -->
+                <div class="spread spread--feature">
+                    <span class="spread__block spread__block--sage" aria-hidden="true"></span>
+                    <span class="spread__tag spread__tag--right">N°01 / 05 — Foyer &amp; Threshold</span>
+                    <figure class="frame frame--lg" data-anim="wipe" data-tilt="4">
+                        <div class="frame__media">
+                            <img src="images/themystic_canvas_1779602765_3903910191875138210_31381163558_5.jpg" alt="Carved teak entrance door beside a teal door and peacock chinoiserie wallpaper, Indore" loading="lazy">
+                        </div>
+                        <figcaption class="frame__cap"><strong>Peacock Foyer</strong><span>Indore · 14 SQM · 2024</span></figcaption>
+                    </figure>
+                </div>
 
-                <figure class="frame frame--right" data-anim="wipe" data-tilt="5">
-                    <div class="frame__media">
-                        <img src="images/themystic_canvas_1737872942_3553858284124111784_31381163558_1.jpg" alt="Bedroom with hand-painted bird-and-branch wall, blue headboard and cane detailing, Indore" loading="lazy">
-                    </div>
-                    <figcaption class="frame__cap"><strong>Hand-painted Retreat</strong><span>Indore — 2023</span></figcaption>
-                </figure>
+                <!-- Spread 02 — two staggered frames over a cream block -->
+                <div class="spread spread--pair">
+                    <span class="spread__block spread__block--cream" aria-hidden="true"></span>
+                    <span class="spread__tag spread__tag--left">N°02–03 / 05 — Private Retreats</span>
+                    <figure class="frame frame--a" data-anim="wipe" data-tilt="5">
+                        <div class="frame__media">
+                            <img src="images/themystic_canvas_1685333467_3113125218562760574_31381163558_1.jpg" alt="Master bedroom with teal channel-tufted headboard and bench, Indore" loading="lazy">
+                        </div>
+                        <figcaption class="frame__cap"><strong>The Teal Master Suite</strong><span>Indore · 22 SQM · 2023</span></figcaption>
+                    </figure>
+                    <figure class="frame frame--b" data-anim="wipe" data-tilt="6">
+                        <div class="frame__media">
+                            <img src="images/themystic_canvas_1737872942_3553858284124111784_31381163558_1.jpg" alt="Bedroom with hand-painted bird-and-branch wall, blue headboard and cane detailing, Indore" loading="lazy">
+                        </div>
+                        <figcaption class="frame__cap"><strong>Hand-painted Retreat</strong><span>Indore · 18 SQM · 2023</span></figcaption>
+                    </figure>
+                </div>
 
-                <figure class="frame frame--wide" data-anim="wipe" data-tilt="4">
-                    <div class="frame__media">
-                        <img src="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg" alt="Living room with blue velvet seating, diamond mirror niche and travertine table, Indore" loading="lazy">
-                    </div>
-                    <figcaption class="frame__cap"><strong>Sunlit Living Pavilion</strong><span>Indore — 2024</span></figcaption>
-                </figure>
+                <!-- Spread 03 — offset image pushed right, over a tinted block -->
+                <div class="spread spread--offset">
+                    <span class="spread__block spread__block--terra" aria-hidden="true"></span>
+                    <span class="spread__tag spread__tag--left">N°04 / 05 — Living</span>
+                    <figure class="frame frame--lg" data-anim="wipe" data-tilt="4">
+                        <div class="frame__media">
+                            <img src="images/themystic_canvas_1683178619_3095049047182202228_31381163558_1.jpg" alt="Living room with blue velvet seating, diamond mirror niche and travertine table, Indore" loading="lazy">
+                        </div>
+                        <figcaption class="frame__cap"><strong>Sunlit Living Pavilion</strong><span>Indore · 38 SQM · 2024</span></figcaption>
+                    </figure>
+                </div>
 
-                <figure class="frame frame--narrow" data-anim="wipe" data-tilt="6">
-                    <div class="frame__media">
-                        <img src="images/themystic_canvas_1664348351_2937089312154356419_31381163558_1.jpg" alt="Dressing niche with arched neon-lit mirror, teak wardrobe and teal bench, Indore" loading="lazy">
-                    </div>
-                    <figcaption class="frame__cap"><strong>Arched Dressing Niche</strong><span>Indore — 2023</span></figcaption>
-                </figure>
+                <!-- Spread 04 — narrow solo, indented -->
+                <div class="spread spread--solo">
+                    <span class="spread__tag spread__tag--left">N°05 / 05 — Dressing</span>
+                    <figure class="frame frame--narrow" data-anim="wipe" data-tilt="6">
+                        <div class="frame__media">
+                            <img src="images/themystic_canvas_1664348351_2937089312154356419_31381163558_1.jpg" alt="Dressing niche with arched neon-lit mirror, teak wardrobe and teal bench, Indore" loading="lazy">
+                        </div>
+                        <figcaption class="frame__cap"><strong>Arched Dressing Niche</strong><span>Indore · 9 SQM · 2023</span></figcaption>
+                    </figure>
+                </div>
+
             </div>
         </div>
     </section>
@@ -1273,7 +1391,7 @@
                 yPercent: 16, opacity: 0.5, ease: 'none',
                 scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
             });
-            gsap.to('.hero__media video', {
+            gsap.to('.hero__frame video', {
                 scale: 1.14, ease: 'none',
                 scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
             });
@@ -1378,13 +1496,26 @@
                     '  vec2 s = (ia > pa) ? vec2(pa/ia, 1.0) : vec2(1.0, ia/pa);',
                     '  return (uv - 0.5) * s + 0.5;',
                     '}',
+                    // cheap value-noise for an organic displacement field
+                    'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }',
+                    'float noise(vec2 p){',
+                    '  vec2 i = floor(p); vec2 f = fract(p);',
+                    '  vec2 u = f * f * (3.0 - 2.0 * f);',
+                    '  return mix(mix(hash(i + vec2(0.0,0.0)), hash(i + vec2(1.0,0.0)), u.x),',
+                    '             mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);',
+                    '}',
                     'void main(){',
                     '  float p = clamp(uProgress, 0.0, 1.0);',
+                    '  float env = sin(p * 3.14159);',                          // 0 -> 1 -> 0 across the morph
+                    // organic "liquid stone / shifting shadow" displacement, peaks mid-transition
+                    '  float nA = noise(vUv * 3.5 + vec2(p * 1.5, 0.0));',
+                    '  float nB = noise(vUv * 3.5 + vec2(0.0, p * 1.5) + 17.3);',
+                    '  vec2 disp = (vec2(nA, nB) - 0.5) * env * 0.16;',
                     '  vec2 dir = vUv - 0.5;',
-                    '  vec2 uv0 = coverUV(vUv + dir * p * 0.35, uPlaneAspect, uAspect0);',
-                    '  vec2 uv1 = coverUV(vUv - dir * (1.0 - p) * 0.35, uPlaneAspect, uAspect1);',
+                    '  vec2 uv0 = coverUV(vUv + dir * p * 0.30 + disp, uPlaneAspect, uAspect0);',
+                    '  vec2 uv1 = coverUV(vUv - dir * (1.0 - p) * 0.30 + disp, uPlaneAspect, uAspect1);',
                     '  vec4 c0 = texture2D(uTex0, uv0);',
-                    '  float split = sin(p * 3.14159) * 0.012;',
+                    '  float split = env * 0.012;',
                     '  vec4 c1 = texture2D(uTex1, uv1);',
                     '  c1.r = texture2D(uTex1, uv1 + vec2(split, 0.0)).r;',
                     '  c1.b = texture2D(uTex1, uv1 - vec2(split, 0.0)).b;',
@@ -1514,6 +1645,9 @@
                 }
                 el.addEventListener('mousemove', function (e) {
                     var r = el.getBoundingClientRect();
+                    // drive the cursor-following light-catch sheen
+                    el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+                    el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
                     var nx = (e.clientX - (r.left + r.width / 2)) / r.width;
                     var ny = (e.clientY - (r.top + r.height / 2)) / r.height;
                     var ry = nx * strength, rx = -ny * strength;
@@ -1524,31 +1658,83 @@
                     if (hasGSAP) { setRY(0); setRX(0); } else { el.style.transform = ''; }
                 });
             };
-            addTilt(document.querySelector('.showcase'), 6);
-            document.querySelectorAll('.opt').forEach(function (card) { addTilt(card, 5); });
+            // Showcase + engraved cards — unified perspective tilt
+            addTilt(document.querySelector('.showcase'), 7);
+            document.querySelectorAll('.opt').forEach(function (card) { addTilt(card, 8); });
+
+            // Gallery frames — multi-layer parallax: the foreground photo glides
+            // faster than its framing block for a sense of spatial depth.
             document.querySelectorAll('.frame[data-tilt]').forEach(function (fr) {
-                addTilt(fr.querySelector('.frame__media'), parseFloat(fr.getAttribute('data-tilt')) || 4);
+                var media = fr.querySelector('.frame__media');
+                var img = fr.querySelector('img');
+                if (!media || !img) return;
+                var strength = parseFloat(fr.getAttribute('data-tilt')) || 4;
+                var setRY, setRX, setIX, setIY;
+                if (hasGSAP) {
+                    setRY = gsap.quickTo(media, 'rotationY', { duration: 0.7, ease: 'power3' });
+                    setRX = gsap.quickTo(media, 'rotationX', { duration: 0.7, ease: 'power3' });
+                    setIX = gsap.quickTo(img, 'x', { duration: 0.9, ease: 'power3' });
+                    setIY = gsap.quickTo(img, 'y', { duration: 0.9, ease: 'power3' });
+                    gsap.set(media, { transformPerspective: 1000, transformOrigin: 'center' });
+                }
+                media.addEventListener('mousemove', function (e) {
+                    var r = media.getBoundingClientRect();
+                    var nx = (e.clientX - (r.left + r.width / 2)) / r.width;
+                    var ny = (e.clientY - (r.top + r.height / 2)) / r.height;
+                    if (hasGSAP) {
+                        setRY(nx * strength); setRX(-ny * strength);                  // framing block tilts
+                        setIX(nx * r.width * 0.035); setIY(ny * r.height * 0.035);    // foreground photo glides faster
+                    } else {
+                        media.style.transform = 'perspective(1000px) rotateY(' + (nx * strength) + 'deg) rotateX(' + (-ny * strength) + 'deg)';
+                    }
+                });
+                media.addEventListener('mouseleave', function () {
+                    if (hasGSAP) { setRY(0); setRX(0); setIX(0); setIY(0); }
+                    else { media.style.transform = ''; }
+                });
             });
         }
 
         /* ============================================================
-           CUSTOM CURSOR
+           CUSTOM CURSOR — two-part fluid pointer
+           · dot  = crisp, exact, immediate
+           · ring = lags behind via rAF + Lerp(0.15) for organic inertia
+           · generic interactive → expands + inverts (difference blend)
+           · nav links / 3D option cards → magnetically snaps to centre
         ============================================================ */
         if (fine && !reduced) {
             document.documentElement.classList.add('cursor-on');
             var ring = document.getElementById('cursorRing');
             var dot = document.getElementById('cursorDot');
             var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my;
+            var snapEl = null;
             window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
-            var hoverSel = 'a, button, input, textarea, select, .index__row, [data-cursor], [data-magnetic]';
+
+            // Generic interactive → ring expands + inverts colour, dot hides
+            var hoverSel = 'a, button, input, textarea, select, [data-cursor], [data-magnetic]';
             document.querySelectorAll(hoverSel).forEach(function (el) {
-                el.addEventListener('mouseenter', function () { ring.classList.add('is-hover'); });
-                el.addEventListener('mouseleave', function () { ring.classList.remove('is-hover'); });
+                el.addEventListener('mouseenter', function () {
+                    if (el.classList.contains('cursor-snap')) return;   // snap targets handled below
+                    ring.classList.add('is-hover'); dot.classList.add('is-hide');
+                });
+                el.addEventListener('mouseleave', function () {
+                    ring.classList.remove('is-hover'); dot.classList.remove('is-hide');
+                });
             });
+
+            // Magnetic snap → ring locks onto the element's centre to emphasise it
+            document.querySelectorAll('.nav-links a, .opt').forEach(function (el) {
+                el.classList.add('cursor-snap');
+                el.addEventListener('mouseenter', function () { snapEl = el; ring.classList.add('is-snap'); });
+                el.addEventListener('mouseleave', function () { snapEl = null; ring.classList.remove('is-snap'); });
+            });
+
             (function loop() {
-                rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
-                ring.style.transform = 'translate(' + (rx - 19) + 'px,' + (ry - 19) + 'px)';
-                dot.style.transform = 'translate(' + (mx - 2.5) + 'px,' + (my - 2.5) + 'px)';
+                var tx = mx, ty = my;
+                if (snapEl) { var b = snapEl.getBoundingClientRect(); tx = b.left + b.width / 2; ty = b.top + b.height / 2; }
+                rx = lerp(rx, tx, 0.15); ry = lerp(ry, ty, 0.15);   // Lerp 0.15 — drag, lag & glide
+                ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%, -50%)';
+                dot.style.transform = 'translate(' + mx + 'px,' + my + 'px) translate(-50%, -50%)';
                 requestAnimationFrame(loop);
             })();
         }
