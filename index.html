@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mystic Canvas | Luxury Interior Design</title>
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --secondary: #F9F6F0;
+            --accent: #C5A880;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1600') no-repeat center center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light);
+            padding: 0 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            color: #E0E0E0;
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2.5rem;
+            background-color: var(--accent);
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--text-light);
+        }
+
+        /* About / Philosophy Section */
+        .about {
+            padding: 5rem 5%;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .about h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+            margin: 10px auto 0;
+        }
+
+        /* Portfolio Grid */
+        .portfolio {
+            padding: 5rem 5%;
+            background-color: #FFFFFF;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 5%;
+            background-color: var(--primary);
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .contact h2 {
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .contact p {
+            color: #A0A0A0;
+            margin-bottom: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            nav { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Mystic<span>Canvas</span></div>
+    </nav>
+
+    <section class="hero">
+        <h1>Transforming Spaces</h1>
+        <p>Bespoke interior design solutions tailored to reflect your unique story and lifestyle.</p>
+        <a href="#contact" class="btn">View Our Spaces</a>
+    </section>
+
+    <section class="about">
+        <h2>Our Design Philosophy</h2>
+        <p>At The Mystic Canvas, we believe that every room is a blank canvas waiting for a story. We blend functionality with elegant aesthetics, crafting personalized sanctuaries that inspire and elevate everyday living.</p>
+    </section>
+
+    <section class="portfolio">
+        <h2 class="section-title">Featured Spaces</h2>
+        <div class="grid">
+            <div class="grid-item">
+                <img src="https://images.unsplash.com/photo-1616486038856-f36b5d92762e?q=80&w=600" alt="Living Room">
+                <div class="grid-overlay"><h3>Modern Minimalist Living</h3></div>
+            </div>
+            <div class="grid-item">
+                <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=600" alt="Kitchen">
+                <div class="grid-overlay"><h3>Contemporary Culinary Kitchen</h3></div>
+            </div>
+            <div class="grid-item">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=600" alt="Bedroom">
+                <div class="grid-overlay"><h3>Serene Master Suite</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Ready to collaborate?</h2>
+        <p>Let's turn your vision into a reality. Get a personalized design consultation.</p>
+        <a href="mailto:design@themysticcanvas.com" class="btn">Let's Connect</a>
+    </section>
+
+</body>
+</html>
