@@ -223,11 +223,19 @@
            PANEL 4 — CONTACT
         ============================================================ */
         .s4{ background:var(--bg); }
-        .s4 .panel__inner{ justify-content:center; }
-        .contact__grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:clamp(2rem,6vw,5rem); align-items:end; }
+        .contact__body{ position:relative; flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; }
+        .contact__grid{ position:relative; z-index:1; display:grid; grid-template-columns:1.1fr 0.9fr; gap:clamp(2rem,6vw,5rem); align-items:end; }
+        .contact__dial{ position:absolute; top:50%; right:-4%; transform:translateY(-50%); width:clamp(340px,36vw,560px); z-index:0; pointer-events:none; }
+        .contact__dial svg{ width:100%; height:auto; display:block; animation:dialTurn 90s linear infinite; transform-origin:50% 50%; }
+        @keyframes dialTurn{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        .contact__avail{ display:inline-flex; align-items:center; gap:0.55rem; margin-top:clamp(1.2rem,3vw,1.8rem); font-family:var(--mono); font-size:0.62rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--ink-mute); }
+        .contact__avail::before{ content:''; width:7px; height:7px; border-radius:50%; background:var(--sage); animation:pulseSage 2.4s ease-out infinite; }
+        @keyframes pulseSage{0%{box-shadow:0 0 0 0 rgba(126,144,114,0.45)}70%{box-shadow:0 0 0 7px rgba(126,144,114,0)}100%{box-shadow:0 0 0 0 rgba(126,144,114,0)}}
         .contact__title{ font-family:var(--serif); font-weight:300; font-size:clamp(2.2rem,5.5vw,4.2rem); line-height:1.05; letter-spacing:-0.02em; color:var(--ink); }
         .contact__title em{ font-style:italic; color:var(--terra); }
-        .contact__email{ display:inline-block; margin-top:clamp(1.4rem,4vw,2.2rem); font-family:var(--serif); font-size:clamp(1.15rem,2.4vw,1.9rem); color:var(--ink); position:relative; }
+        .contact__email{ display:inline-block; margin-top:clamp(0.9rem,2.2vw,1.4rem); font-family:var(--serif); font-size:clamp(1.15rem,2.4vw,1.9rem); color:var(--ink); position:relative; }
+        .contact__email .ar{ font-size:0.62em; color:var(--brass); margin-left:0.45em; display:inline-block; transition:transform .4s var(--ease); }
+        .contact__email:hover .ar{ transform:translate(4px,-4px); }
         .contact__email::after{ content:''; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:var(--brass); transform:scaleX(0); transform-origin:left; transition:transform .5s var(--ease); }
         .contact__email:hover::after{ transform:scaleX(1); }
         .contact__meta{ display:flex; flex-direction:column; gap:1.2rem; font-family:var(--mono); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-mute); }
@@ -361,8 +369,9 @@
             .tool.is-press .tool__name, .tool.is-press .tool__no { color: var(--brass-deep); }
             .tool.is-press .tool__chev { background: var(--brass); border-color: var(--brass); }
 
-            /* ── 4 · CONTACT — single column ──────────────────────────────────── */
+            /* ── 4 · CONTACT — single column (desktop dial + sec-head stay off) ─ */
             .contact__grid { grid-template-columns: 1fr; gap: 2rem; }
+            .s4 .sec-head, .contact__dial { display: none; }
             .s4__foot { position: static; margin-top: 2rem; }
 
             .sec-head__meta { display: none; }
@@ -509,15 +518,48 @@
         <section class="panel s4" id="contact" aria-label="Contact">
             <div class="panel__inner">
                 <span class="screen__num">04 — Contact</span>
-                <div class="contact__grid">
-                    <div data-reveal>
-                        <h2 class="contact__title">Let&rsquo;s compose<br>your <em>space</em>.</h2>
-                        <a href="mailto:design@themysticcanvas.com" class="contact__email" data-magnetic>design@themysticcanvas.com</a>
+                <header class="sec-head">
+                    <span class="sec-head__no">04</span>
+                    <span class="sec-head__name">Begin a Project</span>
+                    <span class="sec-head__meta">Replies Within 48h</span>
+                </header>
+                <div class="contact__body">
+                    <div class="contact__dial" aria-hidden="true">
+                        <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" fill="none">
+                            <circle cx="300" cy="300" r="288" stroke="rgba(26,26,26,0.08)" stroke-width="1"/>
+                            <circle cx="300" cy="300" r="226" stroke="rgba(163,126,60,0.20)" stroke-width="1" stroke-dasharray="2 9"/>
+                            <circle cx="300" cy="300" r="156" stroke="rgba(26,26,26,0.08)" stroke-width="1"/>
+                            <circle cx="300" cy="300" r="226" stroke="rgba(163,126,60,0.5)" stroke-width="1.5" stroke-dasharray="90 1330"/>
+                            <g stroke="rgba(26,26,26,0.16)" stroke-width="1">
+                                <line x1="300" y1="12" x2="300" y2="30"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(30 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(60 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(90 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(120 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(150 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(180 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(210 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(240 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(270 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(300 300 300)"/>
+                                <line x1="300" y1="12" x2="300" y2="30" transform="rotate(330 300 300)"/>
+                            </g>
+                            <circle cx="300" cy="300" r="3" fill="rgba(163,126,60,0.6)"/>
+                            <line x1="282" y1="300" x2="318" y2="300" stroke="rgba(163,126,60,0.4)" stroke-width="1"/>
+                            <line x1="300" y1="282" x2="300" y2="318" stroke="rgba(163,126,60,0.4)" stroke-width="1"/>
+                        </svg>
                     </div>
-                    <div class="contact__meta" data-reveal style="--i:1">
-                        <div>Studio<span>Indore, Madhya Pradesh · By appointment</span></div>
-                        <div>Telephone<span><a href="tel:+918989029494">+91 89890 29494</a></span></div>
-                        <div>Social<span><a href="https://www.instagram.com/themystic_canvas/">@themystic_canvas</a></span></div>
+                    <div class="contact__grid">
+                        <div data-reveal>
+                            <h2 class="contact__title">Let&rsquo;s compose<br>your <em>space</em>.</h2>
+                            <p class="contact__avail">Accepting new projects — Q3 2026</p>
+                            <a href="mailto:design@themysticcanvas.com" class="contact__email" data-magnetic>design@themysticcanvas.com<span class="ar" aria-hidden="true">↗</span></a>
+                        </div>
+                        <div class="contact__meta" data-reveal style="--i:1">
+                            <div>Studio<span>Indore, Madhya Pradesh · By appointment</span></div>
+                            <div>Telephone<span><a href="tel:+918989029494">+91 89890 29494</a></span></div>
+                            <div>Social<span><a href="https://www.instagram.com/themystic_canvas/">@themystic_canvas</a></span></div>
+                        </div>
                     </div>
                 </div>
                 <div class="s4__foot">
@@ -544,6 +586,9 @@
         var deckOn = function () { return docEl.classList.contains('deck-mode'); };
 
         var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+        var s1VidLayer = document.querySelector('.s1__video');
+        /* per-panel content layer for the transition depth pass (hero has no .panel__inner) */
+        function innerOf(p) { return p.querySelector('.panel__inner') || p.querySelector('.s1__warpwrap'); }
         var head = document.getElementById('siteHead');
         var pager = document.getElementById('pager');
         var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
@@ -595,6 +640,21 @@
             inEl.classList.add('is-active');
             gsap.set(inEl, { zIndex: 3 }); gsap.set(outEl, { zIndex: 2 });
             gsap.fromTo(inEl, { yPercent: dir * 100, scale: 1.04 }, { yPercent: 0, scale: 1, duration: 1.05, ease: 'power3.inOut' });
+
+            /* depth pass (desktop): content glides in a beat behind its panel; the hero
+               video counter-drifts on `y` only — the warp quickTos own xPercent/yPercent */
+            if (deskCap) {
+                var inInner = innerOf(inEl), outInner = innerOf(outEl);
+                if (inInner) gsap.fromTo(inInner, { y: dir * 64 }, { y: 0, duration: 1.2, ease: 'power3.out', overwrite: 'auto', clearProps: 'y' });
+                if (outInner) gsap.fromTo(outInner, { y: 0 }, { y: dir * -44, duration: 1.05, ease: 'power3.inOut', overwrite: 'auto', clearProps: 'y' });
+                /* no clearProps here: clearing any transform component wipes the whole
+                   inline transform, which would drop the video's 1.1 overscan scale */
+                if (s1VidLayer) {
+                    if (inEl.id === 'top') gsap.fromTo(s1VidLayer, { y: -dir * 56 }, { y: 0, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
+                    else if (outEl.id === 'top') gsap.fromTo(s1VidLayer, { y: 0 }, { y: dir * 56, duration: 1.05, ease: 'power3.inOut', overwrite: 'auto' });
+                }
+            }
+
             gsap.to(outEl, { yPercent: -dir * 100, scale: 0.96, duration: 1.05, ease: 'power3.inOut', onComplete: function () {
                 outEl.classList.remove('is-active');
                 gsap.set([outEl, inEl], { clearProps: 'transform,scale,zIndex' });
@@ -741,6 +801,7 @@
             };
             if (hasGSAP && !reduced) {
                 gsap.fromTo(dashWork, { autoAlpha: 0.25, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out', onStart: apply });
+                gsap.fromTo(workImg, { scale: 1.07 }, { scale: 1, duration: 0.9, ease: 'power2.out', overwrite: 'auto', clearProps: 'scale' });
             } else { apply(); }
         }
         tools.forEach(function (t, i) { t.querySelector('.tool__bar').addEventListener('click', function () { selectTool(i); }); });
@@ -763,7 +824,13 @@
             var rxT = gsap.quickTo(s1Inner, 'rotationX', { duration: 0.8, ease: 'power3' });
             gsap.set(s1Inner, { transformPerspective: 900, transformOrigin: 'center' });
             var vxT, vyT;
-            if (s1Vid) { gsap.set(s1Vid, { scale: 1.1 }); vxT = gsap.quickTo(s1Vid, 'xPercent', { duration: 1.1, ease: 'power3' }); vyT = gsap.quickTo(s1Vid, 'yPercent', { duration: 1.1, ease: 'power3' }); }
+            if (s1Vid) {
+                /* Ken Burns settle on load: 1.22 → 1.1, where 1.1 is the resting overscan
+                   the warp parallax + transition counter-drift rely on (never below) */
+                gsap.fromTo(s1Vid, { scale: 1.22 }, { scale: 1.1, duration: 3.6, ease: 'power2.out', delay: 0.15 });
+                vxT = gsap.quickTo(s1Vid, 'xPercent', { duration: 1.1, ease: 'power3' });
+                vyT = gsap.quickTo(s1Vid, 'yPercent', { duration: 1.1, ease: 'power3' });
+            }
             s1.addEventListener('mousemove', function (e) {
                 var nx = (e.clientX / innerWidth) - 0.5, ny = (e.clientY / innerHeight) - 0.5;
                 ryT(nx * 14); rxT(-ny * 14);
