@@ -10,7 +10,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,200;1,9..144,300;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <!-- Animation + WebGL controllers -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -279,17 +279,10 @@
             .video-background video { width: 100%; height: 100%;
                                       object-fit: cover; transform: none; }
 
-            /* 5-stop photographic vignette: dark cap → clear midfield → dark base */
+            /* vignette mask: dark cap → clear midfield → dark base, for text contrast */
             .video-background::after {
                 content: ''; position: absolute; inset: 0; pointer-events: none;
-                background: linear-gradient(
-                    to bottom,
-                    rgba(20,17,13,0.55)  0%,
-                    rgba(20,17,13,0.12) 30%,
-                    rgba(20,17,13,0)    50%,
-                    rgba(20,17,13,0.18) 70%,
-                    rgba(20,17,13,0.68) 100%
-                );
+                background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
             }
 
             .s1__scrim { display: none; }
@@ -314,7 +307,7 @@
             .s1__tag {
                 color: rgba(250,248,245,0.72);
                 margin-bottom: 0.8rem; padding-left: 0.2em;
-                font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+                font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
                 transition: transform 0.8s cubic-bezier(0.25,1,0.5,1), opacity 0.8s ease;
                 will-change: transform, opacity;
             }
@@ -322,8 +315,8 @@
             /* delicate variable-weight serif headline */
             .s1__title {
                 color: var(--ivory);
-                font-size: clamp(2.5rem, 11vw, 3.2rem);
-                font-weight: 300; font-optical-sizing: auto;
+                font-size: clamp(2.75rem, 12.5vw, 4rem);
+                font-weight: 200; font-optical-sizing: auto;
                 line-height: 1.0; letter-spacing: 0.015em;
                 text-shadow: 0 2px 40px rgba(0,0,0,0.3);
                 transition: transform 0.8s cubic-bezier(0.25,1,0.5,1), opacity 0.8s ease;
@@ -337,7 +330,7 @@
                 display: flex; flex-direction: column; align-items: flex-start;
                 gap: 0; margin: 0; padding: 0;
                 color: rgba(250,248,245,0.78);
-                font-size: 11px; letter-spacing: 0.15em;
+                font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
                 transition: transform 0.8s cubic-bezier(0.25,1,0.5,1), opacity 0.8s ease;
                 will-change: transform, opacity;
             }
@@ -348,7 +341,7 @@
                 text-align: left;
                 border-top: 1px solid rgba(255,255,255,0.12);
                 padding-top: 0.8rem; margin-top: 0.6rem;
-                font-size: 10px; letter-spacing: 0.2em;
+                font-size: 10px; letter-spacing: 0.18em;
             }
 
             .s1__cue { display: none; }
