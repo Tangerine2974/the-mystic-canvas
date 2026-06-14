@@ -1,0 +1,21 @@
+{
+  "name": "mystic-noir",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The Mystic Canvas — Noir: dark editorial concept (parallel to the light-theme index.html)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}

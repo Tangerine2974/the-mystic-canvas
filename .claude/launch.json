@@ -6,6 +6,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": [".claude/static-server.mjs"],
       "port": 4321
+    },
+    {
+      "name": "v2-obsidian",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["v2-obsidian/node_modules/vite/bin/vite.js", "--config", "v2-obsidian/vite.config.js", "--port", "5173", "--strictPort"],
+      "port": 5173
     }
   ]
 }

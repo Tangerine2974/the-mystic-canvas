@@ -1,0 +1,14 @@
+# ── Separate local-only project (corporate payslip / financial app) — never commit ──
+pdf-desktop-framework/
+
+# ── No PDFs in this repo, ever (failsafe against payslip / financial documents) ──
+*.pdf
+
+# ── Old light-theme entry point, kept locally as an untracked reference ──
+*.reference.html
+
+# ── Node / build artifacts ──
+node_modules/
+dist/
+.vite/
+*.local
