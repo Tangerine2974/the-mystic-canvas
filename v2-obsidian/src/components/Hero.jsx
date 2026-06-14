@@ -38,8 +38,8 @@ export default function Hero() {
       <div className="hero__media" ref={media}>
         <video
           ref={video}
-          src="/assets/hero.mp4"
-          poster="/assets/hero-poster.jpg"
+          src={`${import.meta.env.BASE_URL}assets/hero.mp4`}
+          poster={`${import.meta.env.BASE_URL}assets/hero-poster.jpg`}
           autoPlay
           loop
           muted

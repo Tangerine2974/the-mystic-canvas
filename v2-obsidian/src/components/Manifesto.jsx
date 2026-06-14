@@ -36,7 +36,7 @@ export default function Manifesto() {
         </div>
       </div>
       <figure className="mani__figure reveal">
-        <img src="/assets/editorial-01.jpg" alt="Warm timber and stone interior, Indore" loading="lazy" />
+        <img src={`${import.meta.env.BASE_URL}assets/editorial-01.jpg`} alt="Warm timber and stone interior, Indore" loading="lazy" />
       </figure>
     </section>
   );

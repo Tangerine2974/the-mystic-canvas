@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion.js';
 
+// BASE_URL = '/the-mystic-canvas/' in the Pages build, '/' in dev — keeps photo paths correct on both
+const BASE = import.meta.env.BASE_URL;
 const FEATURES = [
-  { img: '/assets/feature-01.jpg', title: 'Teal Chamber',     tag: 'Apartment · Bedroom' },
-  { img: '/assets/feature-02.jpg', title: 'Velvet Pavilion',  tag: 'Residence · Living' },
-  { img: '/assets/feature-03.jpg', title: 'Teak Niche',       tag: 'Atelier · Dressing' },
-  { img: '/assets/feature-04.jpg', title: 'Carved Threshold', tag: 'Hospitality · Foyer' },
-  { img: '/assets/feature-05.jpg', title: 'Brass Refectory',  tag: 'Residence · Dining' },
-  { img: '/assets/feature-06.jpg', title: 'Stone Veranda',    tag: 'House · Threshold' },
-  { img: '/assets/feature-07.jpg', title: 'Jaali Study',      tag: 'Residence · Study' },
-  { img: '/assets/feature-08.jpg', title: 'Cane Lounge',      tag: 'Apartment · Living' },
-  { img: '/assets/feature-09.jpg', title: 'Marble Galley',    tag: 'Residence · Kitchen' },
-  { img: '/assets/feature-10.jpg', title: 'Arched Salon',     tag: 'Hospitality · Lounge' },
-  { img: '/assets/feature-11.jpg', title: 'Indigo Suite',     tag: 'Hotel · Suite' },
-  { img: '/assets/feature-12.jpg', title: 'Terrazzo Bath',    tag: 'Residence · Bath' },
-  { img: '/assets/feature-13.jpg', title: 'Walnut Library',   tag: 'House · Library' },
-  { img: '/assets/feature-14.jpg', title: 'Courtyard Edit',   tag: 'House · Courtyard' },
+  { img: `${BASE}assets/feature-01.jpg`, title: 'Teal Chamber',     tag: 'Apartment · Bedroom' },
+  { img: `${BASE}assets/feature-02.jpg`, title: 'Velvet Pavilion',  tag: 'Residence · Living' },
+  { img: `${BASE}assets/feature-03.jpg`, title: 'Teak Niche',       tag: 'Atelier · Dressing' },
+  { img: `${BASE}assets/feature-04.jpg`, title: 'Carved Threshold', tag: 'Hospitality · Foyer' },
+  { img: `${BASE}assets/feature-05.jpg`, title: 'Brass Refectory',  tag: 'Residence · Dining' },
+  { img: `${BASE}assets/feature-06.jpg`, title: 'Stone Veranda',    tag: 'House · Threshold' },
+  { img: `${BASE}assets/feature-07.jpg`, title: 'Jaali Study',      tag: 'Residence · Study' },
+  { img: `${BASE}assets/feature-08.jpg`, title: 'Cane Lounge',      tag: 'Apartment · Living' },
+  { img: `${BASE}assets/feature-09.jpg`, title: 'Marble Galley',    tag: 'Residence · Kitchen' },
+  { img: `${BASE}assets/feature-10.jpg`, title: 'Arched Salon',     tag: 'Hospitality · Lounge' },
+  { img: `${BASE}assets/feature-11.jpg`, title: 'Indigo Suite',     tag: 'Hotel · Suite' },
+  { img: `${BASE}assets/feature-12.jpg`, title: 'Terrazzo Bath',    tag: 'Residence · Bath' },
+  { img: `${BASE}assets/feature-13.jpg`, title: 'Walnut Library',   tag: 'House · Library' },
+  { img: `${BASE}assets/feature-14.jpg`, title: 'Courtyard Edit',   tag: 'House · Courtyard' },
 ];
 
 /* Two tuned profiles. Desktop spreads the full set on a denser curve; MOBILE IS THE

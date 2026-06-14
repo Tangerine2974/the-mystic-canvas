@@ -7,8 +7,11 @@ import { fileURLToPath } from 'node:url';
 //   node mystic-noir/node_modules/vite/bin/vite.js --config mystic-noir/vite.config.js
 const root = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig({
+// base: '/' in dev so the local preview works at localhost:5173/, and the GitHub Pages
+// project sub-path ('/the-mystic-canvas/') for the production build that gets deployed.
+export default defineConfig(({ command }) => ({
   root,
+  base: command === 'build' ? '/the-mystic-canvas/' : '/',
   plugins: [react()],
   server: { host: true },
-});
+}));
